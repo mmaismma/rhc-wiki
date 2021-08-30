@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:site_name" content="RHC Wiki" />
+    <meta name="description"
+        content="Have you ever wanted to contribute to the r/Hermitcraft Wiki but you stopped short for some reason? Not sure how you could help? Wanted to pass on some info but didn't want to write a whole page about it? We have the answer for you! Our aim is to improve the r/HermitCraft wiki and make it a resource we can all use to learn more, settle disputes or just nerd out for a while. This is a mammoth task and we need a lot of help achieving it. This is where you can come in." />
+    <meta property="og:url" content="https://rhc-wiki.web.app/" />
+    <meta property="og:image" content="https://rhc-wiki.web.app/assets/icons/hc8-text%20dark-green.png" />
+    <meta property="og:locale" content="en_US" />
+    <link rel="canonical" href="https://rhc-wiki.web.app/" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="RHC Wiki" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#2bda9d" />
+    <meta name="theme-color" content="#2bda9d" id="theme-color-meta" />
+    <title>RHC Wiki: Operation Improve The Wiki</title>
+
+    <link rel="shortcut icon" sizes="32x32" href="assets/icons/favicon.ico">
+    <link rel="shortcut icon" sizes="48x48" href="assets/icons/favicon48x48.ico">
+    <link rel="shortcut icon" sizes="128x128" href="assets/icons/favicon128x128.ico">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <!--Preloading images-->
+    <link rel=preload href="assets/textures/book/book.png" as="image" imagesrcset="assets/textures/book/book.png">
+
+    <script defer src="https://unpkg.com/three/build/three.min.js"></script>
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+
+    <background></background>
+    <chat>
+        <div style="display: none;" id="chat-history">
+            <div id="messages"></div>
+            <chat-input>
+                <input id="message-input" autocomplete="off" title="Type your message here"
+                    placeholder="Type your message here">
+                <button id="send-message" class="mc-java small" title="Send message">&check;</button>
+                <button id="close-chat-history" class="mc-java small" title="Close chat history">&times;</button>
+            </chat-input>
+        </div>
+        <div id="live-chat">
+        </div>
+    </chat>
+
+    <section class="screen active" id="main-menu">
+        <header>
+            <div>
+                <img src="assets/icons/title.webp" alt="RHC Wiki" class="title">
+                <div id="splash-text">Thanks for contributing!</div>
+            </div>
+        </header>
+
+        <nav>
+            <button class="mc-java change-screen" data-to-screen="make-gist">Make a note</button>
+            <button class="mc-java change-screen" data-to-screen="information">What this about?</button>
+            <button class="mc-java" id="sign-in-google">Sign in with Google</button>
+            <button class="mc-java" id="open-chat">Open chat</button>
+        </nav>
+
+        <footer>
+            <span>v1.1</span>
+            <span style="text-align: right;">Brought to you by mmaismma</span>
+        </footer>
+    </section>
+
+    <section class="screen" id="make-gist">
+        <container>
+            <div id="full-book" class="mc-scrollbar">
+                <div class="book">
+                    <div>
+                        <div id="meta-info">
+                            <label for="hermit-picker">Hermit:
+                                <select id="hermit-picker" title="Choose Hermit">
+                                    <option>--None--</option>
+                                    <option>BdoubleO</option>
+                                    <option>Cubfan</option>
+                                    <option>Doc</option>
+                                    <option>Etho</option>
+                                    <option>FalseSymmetry</option>
+                                    <option>Gemini</option>
+                                    <option>Grian</option>
+                                    <option>Hypnotizd</option>
+                                    <option>iJevin</option>
+                                    <option>Impulse</option>
+                                    <option>Iskall</option>
+                                    <option>JoeHills</option>
+                                    <option>Keralis</option>
+                                    <option>Mumbo</option>
+                                    <option>Pearl</option>
+                                    <option>Rendog</option>
+                                    <option>Scar</option>
+                                    <option>StressMonster</option>
+                                    <option>TangoTek</option>
+                                    <option>TinFoilChef</option>
+                                    <option>VintageBeef</option>
+                                    <option>Welsknight</option>
+                                    <option>xBCrafted</option>
+                                    <option>Xisuma</option>
+                                    <option>Zedaph</option>
+                                    <option>Cleo</option>
+                                </select>
+                            </label>
+
+                            <label for="season-picker">Season:
+                                <select id="season-picker" title="Choose Season">
+                                    <option>--None--</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option selected>8</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Author:
+                                <div id="author" title="Sign in/out to change author">Anonymous</div>
+                            </label>
+
+                            <div style="font-size: 0.7em; color: #999;position: absolute;bottom: 0;">v Write Note on the next page v</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="book">
+                    <div>
+                        <textarea class="gist" title="Type your Note here" placeholder="Type your Note here"></textarea>
+                        <auto-save style="display: none;"></auto-save>
+                    </div>
+                </div>
+
+            </div>
+            <div class="controls">
+                <button class="mc-java change-screen" data-to-screen="main-menu">Close</button>
+                <button class="mc-java" id="sign-book">Sign</button>
+            </div>
+        </container>
+    </section>
+
+    <section class="screen" id="information">
+        <div>
+            <main class="mc-scrollbar">
+                <h1>
+                    What's this all about?
+                    <button class="change-screen mc-bedrock-inbox" data-to-screen="main-menu">
+                        &times;
+                    </button>
+                </h1>
+                <div id="info">
+                    <p>Have you ever wanted to contribute to the r/Hermitcraft Wiki but you stopped short for some
+                        reason? Not
+                        sure how you could help? Wanted to pass on some info but didn't want to write a whole page about
+                        it? We
+                        have the answer for you!</p>
+
+                    <p>Our aim is to improve the r/HermitCraft wiki and make it a resource we can all use to learn more,
+                        settle disputes or just nerd out for a while. This is a mammoth task and we need a lot of help
+                        achieving
+                        it. This is where you can come in.</p>
+
+                    <h2>Join the team!</h2>
+                    <p>We're looking for people to contribute in several ways. Note that YOU MUST BE OVER THE AGE OF 13
+                        TO JOIN THE TEAM. Below are the roles we're splitting things into and what we ask each to do:
+                    </p>
+
+                    <h3>Informer:</h3>
+                    <p>What is your favorite Hermit up to now? The informer keeps up to date with a Hermit and lets the
+                        wiki team know what's new. This could be an update on their build or some major news released.
+                    </p>
+
+                    <p>You don't need to make this all beautiful to read or find the right page for it to live. Just
+                        make
+                        sure the wiki team is aware of the facts as quickly as you can.</p>
+
+                    <h3>Describer:</h3>
+                    <p>What's that? You do want to update the Hermit's wiki pages? You love to write and like nothing
+                        more
+                        than turning facts into easily digestible information? Well that's just perfect, you should be a
+                        Describer. Take on the role of updating the details on a Hermit. You'll have the Informers
+                        helping you out
+                        with the info they provide, to support all the great knowledge you have yourself.</p>
+
+                    <h3>Writer:</h3>
+                    <p>Do you have decent wiki writing skills? Do you find developing pages and other similar tasks fun?
+                        If
+                        you answered yes to both of those questions, Writer seems like the role for you! Using your
+                        incredible
+                        writing skills you may be assigned certain one-off tasks such as developing new pages. This job
+                        may
+                        fit you if you think Describer sounds way too easy for you.</p>
+
+                    <h3>DJ:</h3>
+                    <p>Never mind those writing nerds - music is your scene! We have a job for you too. Hermit videos
+                        are
+                        filled with music and we need an expert to track down what it is.
+
+                        You won't have to listen to every second of every video - someone will let you know which video
+                        and
+                        the timestamp - that's when you come in and "name that tune"!</p>
+
+                    <h3>Apply to join the team</h3>
+                    <p>If this all sounds like something you want to be a part of (of course you do!) then now is the
+                        time.
+                        Check out this post.</p>
+
+                    <p>If you have questions, ask them in the comments of <a
+                            href="https://www.reddit.com/r/HermitCraft/comments/oz3zo0/operation_improve_the_rhermitcraft_wiki_2021/?utm_source=share&utm_medium=web2x&context=3">this
+                            post</a>. Any queries, bugs or suggestions related to the
+                        website
+                        itself should be sent as a non-Hermitcraft Note here.</p>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <svg style="display: none">
+        <filter id="blueOverlay">
+            <feColorMatrix type="matrix" values="1.1 0 0 0 0 
+                                                 0 1.1 0 0 0
+                                                 0 0 1.56 0 0
+                                                 0 0 0 1 0 ">
+        </filter>
+    </svg>
+
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+
+    <script>
+        let firebaseConfig = {
+            apiKey: "AIzaSyD2VLt1-ndAHkiuuWFI4azAizlPK0gDbhk",
+            authDomain: "rhc-wiki.web.app",
+            projectId: "rhc-wiki",
+            storageBucket: "gs://rhc-wiki.appspot.com",
+            appId: "1:146740494079:web:212bce76fc79cef09456ca",
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "rhc-wiki",
+  "version": "1.0.0",
+  "description": "A web-based system to ease any contributor of r/HermitCraft Wiki",
+  "main": "public/script.js",
+  "dependencies": {
+    "three": "^0.130.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rhc wiki",
+    "we-eke the wiki"
+  ],
+  "author": "mmaismma",
+  "license": "ISC"
+}
