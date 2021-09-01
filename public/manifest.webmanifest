@@ -4,7 +4,7 @@
     "background_color": "#222222",
     "categories": ["utilities"],
     "description": "Have you ever wanted to contribute to the r/Hermitcraft Wiki but you stopped short for some reason? Not sure how you could help? Wanted to pass on some info but didn't want to write a whole page about it? We have the answer for you! Our aim is to improve the r/HermitCraft wiki and make it a resource we can all use to learn more, settle disputes or just nerd out for a while. This is a mammoth task and we need a lot of help achieving it. This is where you can come in.",
-    "display": "standalone",
+    "display": "minimal-ui",
     "icons": [
         {
             "src": "./assets/icons/hc8-text%20dark-green.png",
