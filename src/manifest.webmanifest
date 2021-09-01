@@ -2,9 +2,9 @@
     "name": "RHC Wiki: Operation Improve The Wiki",
     "short_name": "RHC Wiki",
     "background_color": "#222222",
-    "categories": ["games", "utilities"],
+    "categories": ["utilities"],
     "description": "Have you ever wanted to contribute to the r/Hermitcraft Wiki but you stopped short for some reason? Not sure how you could help? Wanted to pass on some info but didn't want to write a whole page about it? We have the answer for you! Our aim is to improve the r/HermitCraft wiki and make it a resource we can all use to learn more, settle disputes or just nerd out for a while. This is a mammoth task and we need a lot of help achieving it. This is where you can come in.",
-    "display": "fullscreen",
+    "display": "standalone",
     "icons": [
         {
             "src": "./assets/icons/hc8-text%20dark-green.png",
@@ -29,7 +29,7 @@
             "url": "./",
             "icons": [
                 {
-                    "src": "./assets/textures/ui/icon_sign96x96.webp",
+                    "src": "./assets/textures/ui/icon_sign.png",
                     "sizes": "96x96"
                 }
             ]
@@ -41,7 +41,7 @@
             "url": "./describe/",
             "icons": [
                 {
-                    "src": "./assets/textures/ui/icon_book_writable96x96.webp",
+                    "src": "./assets/textures/ui/icon_book_writable96x96.png",
                     "sizes": "96x96"
                 }
             ]

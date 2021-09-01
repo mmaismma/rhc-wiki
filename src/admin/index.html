@@ -33,17 +33,30 @@
         <button id="sign-in-google">Sign in</button>
     </header>
     <nav aria-placeholder="Once you signin with Google, all your pending notes will be shown here">
+        <button onclick="javascript: path = 'user-gists/';UI.notes.refresh()">Go to home</button>
+        <items></items>
     </nav>
     <main>
         <textarea id="previewer" placeholder="Select a file to view it's contents here"></textarea>
         <controls>
-            <button disabled id="invalid" title="Mark as invalid">Invalid</button>
-            <button disabled id="skip" title="Skip this note">Skip</button>
-            <button disabled id="done" title="Mark as done">Done</button>
+            <button disabled id="move">Move</button>
+            <button disabled id="copy">Copy</button>
         </controls>
+        <related-links></related-links>
     </main>
 
-    <describers></describers>
+    <describers>
+        <label><input type="checkbox" data-auth-id="OkuuTu5CfGQBMf7e2O3u4L99chy1" title="">MMA</input></label>
+        <label><input type="checkbox" data-auth-id="tiWKJSPTN7brUHhd502UGVicVgC2" title="">PigMatt</input></label>
+        <label><input type="checkbox" data-auth-id="2w0EZCTUmLfxVS3Xz4Dynx8701i2" title="Grian,Iskall,Mumbo,Xisuma">Wobet</input></label>
+        <label><input type="checkbox" data-auth-id="iRhnntXtwVbR0zbtDVAXtcqeJhy1" title="Scar">Glenn</input></label>
+        <label><input type="checkbox" data-auth-id="adSX7b8KocMp8VPDrcyNZEKHl2N2" title="xB">HC Snippets</input></label>
+        <label><input type="checkbox" data-auth-id="KMLetmj65gdyINJce1wD9E1Lqb03" title="Doc,Gem,Grian,Impulse,Iskall,Mumbo,Pearl">RedLukas</input></label>
+        <label><input type="checkbox" data-auth-id="f8ZgutMb8eaNGnXFrz3DLNkQBtq2" title="Grian,Mumbo,Pearl,Scar,Cleo">SpaceLlamaCow</input></label>
+        <label><input type="checkbox" data-auth-id="YekUuxxkqARahDQSSNBsxhRgAAF2" title="music">DJ Jebdiah</input></label>
+        <label><input type="checkbox" data-auth-id="WysM6dUhSsUkT2KRcKxpGLXTL5w2" title="music">DJ Tantoey</input></label>
+        <label><input type="checkbox" data-auth-id="GumrdQiDVSbHvEIRVt2QlXXsvbX2" title="music">DJ Skye</input></label>
+    </describers>
     
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>

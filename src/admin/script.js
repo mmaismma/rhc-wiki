@@ -1,37 +1,67 @@
-const previewer = document.querySelector('#previewer')
+//,1629931566004.json,1628950414367.json,1629599803987.json,1629599342661.json,1629599427310.json,1629599495676.json,1629599246407.json,1629598935027.json,1629145070224.json,1629058289998.json,1629045672806.json,1629055606456.json,1629056947947.json,1629045216200.json,1629036175307.json,1629035760378.json,1629034510205.json,1628870237870.json,1628831095574.json,1628768404262.json,1628870224339.json,1628444796886.json,1628444919528.json,1628445112592.json,1628445285179.json,1628576195976.json,1628576751706.json,1628651595618.json,1628651706085.json,1628742638275.json,1628743068482.json,1628765626128.json,1628765780064.json,1628766577047.json,1628766305320.json,1628767051867.json,1628767503023.json,1628767972534.json,1628599096385.json,1628685406436.json,1629013734144.json,1629121231273.json,1629202032538.json,1629375491470.json,1629452295506.json,1629452318877.json,1629630416932.json,1629976015731.json,1629981236454.json,1630236203665.json,1628965545749.json,1629026408705.json,1629721608758.json,1628676952825.json,1629069313130.json,1628853918108.json,1628898556629.json,1628636863941.json,1628792713985.json,1628905873081.json,1629222442965.json,1629224746590.json
+const $ = (x) => document.querySelector(x);
+const previewer = $('#previewer')
+
+let path = 'user-gists/';
+
+const updateDimNotes = () => {
+    localStorage.getItem('dimNotes')?.split(',').forEach(dimNote => {
+        [...document.querySelectorAll(`[data-name="${dimNote}"`)].forEach(elm => elm.classList.add('dimmed'))
+    })
+    console.log('akak');
+}
+updateDimNotes()
 
 const UI = {
     showFile(e) {
         UI.notes.selectedNote = null;
         UI.loading(e.target, true);
-        firebase.storage().ref().child(e.target.dataset.fullpath).getDownloadURL().then(url => {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url)
-            xhr.addEventListener('readystatechange', () => {
-                if (xhr.readyState === 4) {
-                    try {
-                        let json = JSON.parse(xhr.response);
-                        UI.notes.selectedNote = {
-                            elm: e.target,
-                            message: json
-                        };
-                        UI.loading(e.target, false)
-                    } catch (error) {
-                        console.log(error)
-                        UI.notes.selectedNote = {
-                            elm: e.target,
-                            message: null
-                        };
-                        UI.loading(e.target, false)
-                    }
-                }
-            })
-            xhr.send();
 
-        }).catch(error => {
-            console.log(error)
-            UI.loading(e.target, false)
-        })
+        if (e.target.dataset.type === 'folder') {
+            firebase.storage().ref().child(`${e.target.dataset.fullpath}/`).listAll().then(result => {
+                console.log(result)
+                UI.notes.allNotes = result;
+                path = `${e.target.dataset.fullpath}/`
+                UI.loading($('nav items'), false)
+            }).catch(error => {
+                console.log(error)
+                UI.loading($('nav items'), false)
+            })
+        }
+        if (e.target.dataset.type === 'file') {
+            firebase.storage().ref().child(e.target.dataset.fullpath).getDownloadURL().then(url => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url)
+                xhr.addEventListener('readystatechange', () => {
+                    if (xhr.readyState === 4) {
+                        try {
+                            let json = JSON.parse(xhr.response);
+                            UI.notes.selectedNote = {
+                                elm: e.target,
+                                message: json,
+                                path: e.target.dataset.fullpath,
+                                name: e.target.textContent
+                            };
+                            UI.loading(e.target, false)
+                        } catch (error) {
+                            console.log(error)
+                            UI.notes.selectedNote = {
+                                elm: e.target,
+                                message: null,
+                                path: e.target.dataset.fullpath,
+                                name: e.target.textContent
+                            };
+                            UI.loading(e.target, false)
+                        }
+                    }
+                })
+                xhr.send();
+
+            }).catch(error => {
+                console.log(error)
+                UI.loading(e.target, false)
+            })
+        }
     },
     loading(elm, loading = 'toggle', blockPointerEvents = true, colorArray = []) {
         switch (loading) {
@@ -64,23 +94,24 @@ const UI = {
     },
     notes: new Proxy({
         selectedNote: null,
+        allSelectedNotes: [],
         allNotes: [],
         refresh() {
             previewer.value = '';
-            UI.loading(document.getElementsByTagName('nav')[0], true)
-            firebase.storage().ref().child(`user-gists/`).listAll().then(result => {
+            UI.loading($('nav items'), true)
+            firebase.storage().ref().child(path).listAll().then(result => {
                 console.log(result)
-                UI.notes.allNotes = result.items;
-                UI.loading(document.getElementsByTagName('nav')[0], false)
+                UI.notes.allNotes = result;
+                UI.loading($('nav items'), false)
             }).catch(error => {
                 console.log(error)
-                UI.loading(document.getElementsByTagName('nav')[0], false)
+                UI.loading($('nav items'), false)
             })
         }
     }, {
         set: (target, property, value, reciever) => {
             if (property === 'selectedNote') {
-                document.querySelector('related-links').innerHTML = 'Related Links:'
+                $('related-links').innerHTML = 'Related Links:';
                 if (target[property]) {
                     target[property].elm.classList.remove('selected')
                 }
@@ -95,7 +126,7 @@ const UI = {
                         hermitButton.href = `https://reddit.com/r/Hermitcraft/wiki/${value.message.hermit}`;
                         hermitButton.target = '_blank';
                         hermitButton.title = `Open ${value.message.hermit}'s wiki page in new tab`;
-                        document.querySelector('related-links').append(hermitButton)
+                        $('related-links').append(hermitButton)
                     }
                     if (value.message?.season && value.message?.season !== '--None--') {
                         let seasonButton = document.createElement('a');
@@ -103,32 +134,57 @@ const UI = {
                         seasonButton.href = `https://reddit.com/r/Hermitcraft/wiki/season_${value.message.season}`;
                         seasonButton.target = '_blank';
                         seasonButton.title = `Open season ${value.message.season} wiki page in new tab`;
-                        document.querySelector('related-links').append(seasonButton)
+                        $('related-links').append(seasonButton)
                     }
-
-                    document.getElementById('invalid').disabled = false;
-                    document.getElementById('skip').disabled = false;
-                    document.getElementById('done').disabled = false;
+                    $('#move').disabled = false;
+                    $('#copy').disabled = false;
                 } else {
                     previewer.value = '';
-                    document.getElementById('invalid').disabled = true;
-                    document.getElementById('skip').disabled = true;
-                    document.getElementById('done').disabled = true;
+                    $('#move').disabled = true;
+                    $('#copy').disabled = true;
                 }
                 target[property] = value;
             }
             if (property === 'allNotes') {
                 target.selectedNote = null;
-                if (Array.isArray(value)) {
-                    document.getElementsByTagName('nav')[0].innerHTML = '';
-                    value.forEach(file => {
-                        let tempButton = document.createElement('button');
-                        tempButton.textContent = file.name;
-                        tempButton.dataset.fullpath = file.fullPath;
-                        tempButton.onclick = UI.showFile;
-                        document.getElementsByTagName('nav')[0].append(tempButton);
-                    });
-                }
+                $('nav items').innerHTML = '';
+
+                value.prefixes.forEach(folder => {
+                    let tempButton = document.createElement('button');
+                    tempButton.textContent = folder.name;
+                    tempButton.dataset.type = 'folder';
+                    tempButton.dataset.fullpath = folder.fullPath;
+                    tempButton.onclick = UI.showFile;
+                    $('nav items').append(tempButton);
+                });
+
+                value.items.forEach(file => {
+                    let tempButton = document.createElement('button');
+                    tempButton.textContent = file.name;
+                    tempButton.dataset.type = 'file';
+                    tempButton.dataset.fullpath = file.fullPath;
+                    tempButton.dataset.name = file.name;
+                    tempButton.onclick = e => {
+                        if (e.altKey) {
+                            let dimNotes = localStorage.getItem('dimNotes')
+                            if (dimNotes.split(',').includes(e.target.dataset.name)) {
+                                dimNotes = dimNotes.split(',')
+                                dimNotes.splice(dimNotes.indexOf(e.target.dataset.name), 1);
+                                localStorage.setItem('dimNotes', dimNotes.join())
+                                e.target.classList.remove('dimmed')
+                            } else {
+                                localStorage.setItem('dimNotes', dimNotes + `,${e.target.dataset.name}`)
+                            }
+                            updateDimNotes()
+                        } else if (e.ctrlKey) {
+                            UI.allSelectedNotes.push(e.target.name)
+                        } else {
+                            UI.showFile(e);
+                        }
+                    }
+                    $('nav items').append(tempButton);
+                });
+                updateDimNotes()
             }
         }
     })
@@ -139,29 +195,29 @@ const FIREBASE = {
         google: new firebase.auth.GoogleAuthProvider()
     },
     async authenticate(provider) {
-        UI.loading(document.getElementById('sign-in-google'), true)
+        UI.loading($('#sign-in-google'), true)
         try {
             let result = await firebase.auth().signInWithPopup(provider);
             let credential = result.credential;
             let token = credential.accessToken;
             let user = result.user;
-            document.getElementById('sign-in-google').textContent = `Sign out of ${user.displayName}`;
+            $('#sign-in-google').textContent = `Sign out of ${user.displayName}`;
 
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
         } catch (error) {
             console.log(error)
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
         }
 
     },
     signOut() {
-        UI.loading(document.getElementById('sign-in-google'), true)
+        UI.loading($('#sign-in-google'), true)
         firebase.auth().signOut().then(() => {
-            document.getElementById('sign-in-google').textContent = 'Sign in with Google';
+            $('#sign-in-google').textContent = 'Sign in with Google';
             UI.notes.refresh();
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
         }).catch((error) => {
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
         });
     },
     uploadText(message, contentType = 'application/json', fileName) {
@@ -172,9 +228,11 @@ const FIREBASE = {
         let gistRef = storageRef.child(fileName || 'user-gists/' + Date.now() + '.json');
         return gistRef.putString(message, undefined, metadata)
     },
-    async moveFirebaseFile(currentPath, destinationPath, fileContent) {
+    async moveFirebaseFile(currentPath, destinationPath, operation = 'move') {
         let message = '';
-        if (!fileContent) {
+        if (operation !== 'move' && operation !== 'copy') {
+            message = operation;
+        } else {
             let url = await firebase.storage().ref().child(currentPath).getDownloadURL()
             const xhr = new XMLHttpRequest();
             xhr.open('GET', url, false)
@@ -188,36 +246,80 @@ const FIREBASE = {
             } catch (error) {
                 console.log(error)
             }
-        } else {
-            message = fileContent;
         }
+        console.log(operation);
+        console.log(message);
         try {
-            const putStringStatus = await firebase.storage().ref().child(destinationPath).putString(message);
+            const putStringStatus = await firebase.storage().ref().child(destinationPath).putString(message, undefined, {contentType: 'application/json'});
             console.log(putStringStatus);
-            const deleteStatus = await firebase.storage().ref().child(currentPath).delete()
-            console.log(deleteStatus)
+            if (operation === 'move') {
+                const deleteStatus = await firebase.storage().ref().child(currentPath).delete()
+                console.log(deleteStatus)
+            }
         } catch (error) {
             console.log(error);
         }
     },
     user: null
-
 }
 
-UI.loading(document.getElementById('sign-in-google'), true)
+UI.loading($('#sign-in-google'), true)
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         FIREBASE.user = user;
-        document.getElementById('sign-in-google').textContent = `Sign out of ${user.displayName}`
-        document.getElementById('sign-in-google').onclick = () => {
+        $('#sign-in-google').textContent = `Sign out of ${user.displayName}`
+        $('#sign-in-google').onclick = () => {
             FIREBASE.signOut()
         }
         UI.notes.refresh()
-        UI.loading(document.getElementById('sign-in-google'), false)
+        UI.loading($('#sign-in-google'), false)
     } else {
-        document.getElementById('sign-in-google').onclick = () => {
+        $('#sign-in-google').onclick = () => {
             FIREBASE.authenticate(FIREBASE.authProviders.google)
         }
-        UI.loading(document.getElementById('sign-in-google'), false)
+        UI.loading($('#sign-in-google'), false)
     }
 });
+
+$('#move').onclick = async () => {
+    setTimeout(() => UI.loading($('#move'), true, undefined), 0)
+
+    let checkedDescribers = [];
+    [...$('describers').children].forEach(elm => {
+        if (elm.checked) checkedDescribers.push(elm.dataset.authId);
+    })
+    
+    checkedDescribers.forEach(describer => {
+        FIREBASE.moveFirebaseFile(null, `describers/user-data/${describer}/${UI.notes.selectedNote.name}`, JSON.stringify(UI.notes.selectedNote.message))
+    })
+    const deleteStatus = await firebase.storage().ref().child(UI.notes.selectedNote.path).delete();
+    console.log(deleteStatus)
+
+    UI.notes.refresh()
+    setTimeout(() => UI.loading($('#move'), false), 0)
+}
+
+$('#copy').onclick = async () => {
+    setTimeout(() => UI.loading($('#copy'), true, undefined), 0)
+    
+    let checkedDescribers = [];
+    [...$('describers').children].forEach(elm => {
+        if (elm.children[0].checked) checkedDescribers.push(elm.children[0].dataset.authId);
+    })
+    console.log(checkedDescribers)
+    // for (let i = 0; i < checkedDescribers.length; i++) {
+    //     const describer = checkedDescribers[i];
+    //     console.log('inside copy1.5')
+    //     await FIREBASE.moveFirebaseFile(null, `describers/user-data/${describer}/${UI.notes.selectedNote.name}`, JSON.stringify(UI.notes.selectedNote.message))
+    //     console.log('inside copy1.75')
+    // }
+    checkedDescribers.forEach(async describer => {
+        console.log('inside copy1.5')
+        await FIREBASE.moveFirebaseFile(null, `describers/user-data/${describer}/${UI.notes.selectedNote.name}`, JSON.stringify(UI.notes.selectedNote.message))
+        console.log('inside copy1.75')
+    })
+    console.log('inside copy2')
+
+    UI.notes.refresh()
+    setTimeout(() => UI.loading($('#copy'), false), 0)
+}

@@ -65,7 +65,7 @@
         </nav>
 
         <footer>
-            <span>v1.1</span>
+            <span>v1.2</span>
             <span style="text-align: right;">Brought to you by mmaismma</span>
         </footer>
     </section>
@@ -73,11 +73,11 @@
     <section class="screen" id="make-gist">
         <container>
             <div id="full-book" class="mc-scrollbar">
-                <div class="book">
+                <div class="book" id="book-page-1">
                     <div>
                         <div id="meta-info">
-                            <label for="hermit-picker">Hermit:
-                                <select id="hermit-picker" title="Choose Hermit">
+                            <label for="hermit-picker">Topic:
+                                <select id="hermit-picker" title="Choose Topic (Hermit/Other)">
                                     <option>--None--</option>
                                     <option>BdoubleO</option>
                                     <option>Cubfan</option>
@@ -105,6 +105,7 @@
                                     <option>Xisuma</option>
                                     <option>Zedaph</option>
                                     <option>Cleo</option>
+                                    <option>Music</option>
                                 </select>
                             </label>
 
@@ -127,15 +128,15 @@
                                 <div id="author" title="Sign in/out to change author">Anonymous</div>
                             </label>
 
-                            <div style="font-size: 0.7em; color: #999;position: absolute;bottom: 0;">v Write Note on the next page v</div>
-
                         </div>
+                        <div class="next-page" onclick="javascript: document.querySelector('#book-page-2').classList.remove('hidden');this.parentNode.parentNode.classList.add('hidden');"></div>
                     </div>
                 </div>
-                <div class="book">
+                <div class="book hidden" id="book-page-2">
                     <div>
                         <textarea class="gist" title="Type your Note here" placeholder="Type your Note here"></textarea>
                         <auto-save style="display: none;"></auto-save>
+                        <div class="back-page" onclick="javascript: document.querySelector('#book-page-1').classList.remove('hidden');this.parentNode.parentNode.classList.add('hidden');"></div>
                     </div>
                 </div>
 

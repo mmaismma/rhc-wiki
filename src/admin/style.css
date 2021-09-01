@@ -77,6 +77,12 @@ nav {
     flex-direction: column;
 }
 
+nav items {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
 nav button {
     min-height: 25px;
     line-height: 100%;
@@ -136,14 +142,21 @@ describers {
     grid-area: describers;
     background: var(--color-scale-gray-8);
     overflow: auto;
-    font-size: 0.8em;
     font-family: monospace;
-    white-space: pre-wrap;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+describers label {
+    padding: 2px;
+    /* outline: 1px solid blue; */
+    background: red;
+    margin: 1px;
+    cursor: pointer;
 }
 
 nav button.selected {
     background-color: var(--fancy-blue);
-    pointer-events: none !important;
 }
 
 *:disabled {
@@ -212,4 +225,9 @@ button.mine_chop_dig-loading::before {
     to {
         background-position-x: -910px;
     }
+}
+
+.dimmed {
+    text-decoration: line-through;
+    opacity: 0.5;
 }
