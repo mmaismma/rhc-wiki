@@ -1,0 +1,52 @@
+{
+    "name": "RHC Wiki: Operation Improve The Wiki",
+    "short_name": "RHC Wiki",
+    "background_color": "#222222",
+    "categories": ["games", "utilities"],
+    "description": "Have you ever wanted to contribute to the r/Hermitcraft Wiki but you stopped short for some reason? Not sure how you could help? Wanted to pass on some info but didn't want to write a whole page about it? We have the answer for you! Our aim is to improve the r/HermitCraft wiki and make it a resource we can all use to learn more, settle disputes or just nerd out for a while. This is a mammoth task and we need a lot of help achieving it. This is where you can come in.",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "./assets/icons/hc8-text%20dark-green.png",
+            "sizes": "2000x2000",
+            "purpose": "any"
+        }
+    ],
+    "lang": "en-US",
+    "orientation": "any",
+    "protocol_handlers": [
+        {
+            "protocol": "web+rhcwiki",
+            "url": "./%s"
+        }
+    ],
+    "scope": ".",
+    "shortcuts": [
+        {
+            "name": "Make a Note",
+            "short_name": "Inform",
+            "description": "Inform us about activities in a Hermitcraft episode by sending a Note",
+            "url": "./",
+            "icons": [
+                {
+                    "src": "./assets/textures/ui/icon_sign96x96.webp",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Describe Notes",
+            "short_name": "Describe",
+            "description": "Describe the Notes sent by Informers on the R/HermitCraft Wiki",
+            "url": "./describe/",
+            "icons": [
+                {
+                    "src": "./assets/textures/ui/icon_book_writable96x96.webp",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "start_url": "./",
+    "theme_color": "#2bda9d"
+}
