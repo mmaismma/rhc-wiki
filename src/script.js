@@ -40,7 +40,7 @@ const BACKGROUND = {
     },
     animate() {
         BACKGROUND.theta += window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0.0002 : 0.001;
-        BACKGROUND.camera.lookAt(Math.cos(BACKGROUND.theta), 0, Math.sin(BACKGROUND.theta));
+        BACKGROUND.camera.lookAt(Math.cos(BACKGROUND.theta), -0.3, Math.sin(BACKGROUND.theta));
         BACKGROUND.renderer.render(BACKGROUND.scene, BACKGROUND.camera);
 
         requestAnimationFrame(BACKGROUND.animate);
@@ -179,10 +179,10 @@ const commandList = {
             document.getElementById('theme-color-meta').content = window.getComputedStyle(document.body).outlineColor;
         }, 10)
     },
-    dinnerbone() {
+    Dinnerbone() {
         document.body.style.transform = 'rotate(180deg)'
     },
-    grumm() {
+    Grumm() {
         document.body.style.transform = 'rotate(180deg)'
     },
     'effect clear': () => {
@@ -215,8 +215,8 @@ const UI = {
         let messageP = document.createElement('p')
         let messagePLive = document.createElement('p')
 
-        messageP.textContent = message;
-        messagePLive.textContent = message;
+        messageP.innerHTML = message;
+        messagePLive.innerHTML = message;
 
         document.getElementById('messages').append(messageP)
         document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
@@ -297,6 +297,7 @@ const UI = {
         }
         show() {
             document.body.append(this.advBox)
+            UI.sendMessageInChat(`${FIREBASE.user.user.displayName} completed the advancement <span style="color:lime">[${this.advBox.children[2].textContent}]</span>`)
             setTimeout(() => this.advBox.style.right = '0px', 0)
             setTimeout(() => {
                 this.advBox.style.right = '';
@@ -304,6 +305,27 @@ const UI = {
             }, 7000)
         }
     }
+}
+
+const queryList = {
+    info() {
+        UI.changeScreen('information')
+    },
+    'context-post': () => {
+        console.log('hh')
+        window.location.replace('https://www.reddit.com/r/HermitCraft/comments/oz3zo0/operation_improve_the_rhermitcraft_wiki_2021/')
+    }
+}
+
+try {
+    let queries = window.location.search.split('?')[1].split('&');
+    queries.forEach(query => {
+        if (queryList[query]) {
+            queryList[query]();
+        }
+    })
+} catch (err) {
+    console.log(err)
 }
 
 document.onkeyup = (e) => {
@@ -374,6 +396,8 @@ document.getElementById('open-chat').onclick = () => {
 })
 UI.sendMessageInChat('Press "T" or "Open Chat" to open chat')
 
-navigator.serviceWorker.register('service-worker.js', {
-    scope: './'
-});
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js', {
+        scope: './'
+    });
+}

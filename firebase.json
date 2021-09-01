@@ -5,6 +5,15 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "redirects": [{
+      "source": "/w/:page",
+      "destination": "https://www.reddit.com/r/HermitCraft/wiki/:page",
+      "type": 302
+    }, {
+      "source": "/wiki/:page",
+      "destination": "https://www.reddit.com/r/HermitCraft/wiki/:page",
+      "type": 302
+    }]
   }
 }

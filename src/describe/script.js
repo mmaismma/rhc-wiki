@@ -196,7 +196,7 @@ const FIREBASE = {
             message = fileContent;
         }
         try {
-            const putStringStatus = await firebase.storage().ref().child(destinationPath).putString(message);
+            const putStringStatus = await firebase.storage().ref().child(destinationPath).putString(message, undefined, {contentType: 'application/json'});
             console.log(putStringStatus);
             const deleteStatus = await firebase.storage().ref().child(currentPath).delete()
             console.log(deleteStatus)
