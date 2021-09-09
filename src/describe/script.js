@@ -90,7 +90,7 @@ const UI = {
                     value.elm.classList.add('selected')
                     previewer.value = value.message?.message || value.message || 'Defected File.';
 
-                    if (value.message?.hermit && value.message?.hermit !== '--None--') {
+                    if (value.message?.hermit && value.message?.hermit !== '--None--' && value.message?.hermit !== 'none') {
                         let hermitButton = document.createElement('a');
                         hermitButton.textContent = value.message.hermit;
                         hermitButton.href = `https://reddit.com/r/Hermitcraft/wiki/${value.message.hermit}`;
@@ -98,7 +98,7 @@ const UI = {
                         hermitButton.title = `Open ${value.message.hermit}'s wiki page in new tab`;
                         document.querySelector('related-links').append(hermitButton)
                     }
-                    if (value.message?.season && value.message?.season !== '--None--') {
+                    if (value.message?.season && value.message?.season !== '--None--' && value.message?.hermit !== 'none') {
                         let seasonButton = document.createElement('a');
                         seasonButton.textContent = `Season ${value.message.season}`;
                         seasonButton.href = `https://reddit.com/r/Hermitcraft/wiki/season_${value.message.season}`;
