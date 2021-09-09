@@ -190,15 +190,20 @@ const commandList = {
     Grumm() {
         document.body.style.transform = 'rotate(180deg)'
     },
-    'effect clear': () => {
-        document.body.style.transform = '';
+    effect(query) {
+        if (query[0] === 'clear') {
+            document.body.style.transform = '';
         
-        document.body.classList.remove('jeb_')
-        try {
-            clearInterval(UI.jeb_Interval);
-        } catch {}
-        UI.jeb_Interval = 0;
-        $('#theme-color-meta').content = "#2bda9d";
+            document.body.classList.remove('jeb_')
+            try {
+                clearInterval(UI.jeb_Interval);
+            } catch { }
+            UI.jeb_Interval = 0;
+            $('#theme-color-meta').content = "#2bda9d";
+        }
+    },
+    wiki(query) {
+        window.location.href = `https://rhc-wiki.web.app/wiki/${query[0]}`
     }
 }
 
@@ -262,11 +267,13 @@ const UI = {
         }
 
     },
-    runCommand(command) {
-        if (!commandList[command.slice(1)]) {
+    runCommand(cmd) {
+        let command = cmd.slice(1).split(' ')
+        console.log(command)
+        if (!commandList[command[0]]) {
             return false;
         } else {
-            commandList[command.slice(1)]();
+            commandList[command[0]](command.slice(1));
             return true;
         }
     },
