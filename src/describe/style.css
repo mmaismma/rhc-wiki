@@ -193,7 +193,16 @@ button.loading {
 
 nav button.selected {
     background-color: var(--fancy-blue);
-    pointer-events: none !important;
+}
+
+nav button.yellowed {
+    color: yellow;
+}
+nav button.pinked {
+    color: magenta;
+}
+nav button.yellowed.pinked {
+    color: lime;
 }
 
 *:disabled {
