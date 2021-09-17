@@ -59,6 +59,7 @@ BACKGROUND.animate();
 // End Background Animation Saga
 
 const FIREBASE = {
+    lastNoteName: '',
     uploadGist(data) {
         if (data.length > 2000) {
             return new Error('Data exceeds 2000 character limit');
@@ -71,12 +72,14 @@ const FIREBASE = {
             contentType: 'application/json',
         };
         const message = JSON.stringify({
-            'hermit': $('#hermit-picker').value,
-            'season': $('#season-picker').value,
-            'message': data
+            hermit: $('#hermit-picker').value,
+            season: $('#season-picker').value,
+            episode: $('#episode-picker').value,
+            message: data
         })
-        let user = FIREBASE.user.user ? FIREBASE.user.user.uid : 'anonymous'
-        let gistRef = storageRef.child('user-gists/' + user + '/' + Date.now() + '.json');
+        let user = FIREBASE.user.user ? FIREBASE.user.user.uid : 'anonymous';
+        FIREBASE.lastNoteName = Date.now() + '.json';
+        let gistRef = storageRef.child('user-gists/' + user + '/' + FIREBASE.lastNoteName);
         return gistRef.putString(message, undefined, metadata)
     },
     authProviders: {
@@ -139,7 +142,10 @@ firebase.auth().onAuthStateChanged(function (user) {
 $('#sign-book').onclick = () => {
     setTimeout(() => $('auto-save').style.display = '', 0)
     const response = FIREBASE.uploadGist(document.body.querySelector('.gist').value);
-    if (response instanceof Error) return UI.sendMessageInChat(response);
+    if (response instanceof Error) {
+        setTimeout(() => $('auto-save').style.display = 'none', 0)
+        return UI.sendMessageInChat(response);
+    }
     response.on(firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -150,13 +156,33 @@ $('#sign-book').onclick = () => {
             setTimeout(() => $('auto-save').style.display = 'none', 0)
         },
         () => {
-            UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
-            setTimeout(() => $('auto-save').style.display = 'none', 0)
-            if (!localStorage.sentNote) {
-                localStorage.sentNote = true;
-                let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
-                firstNoteAdv.show();
+            if (!FIREBASE.user.user) {
+                UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
+                setTimeout(() => $('auto-save').style.display = 'none', 0)
+                if (!localStorage.sentNote) {
+                    localStorage.sentNote = true;
+                    let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
+                    firstNoteAdv.show();
+                }
             }
+
+            firebase.firestore().collection(`episode-tracker-s${$('#season-picker').value}`).doc($('#hermit-picker').value).collection(`episode${$('#episode-picker').value}`).doc("informers").set({
+                id: FIREBASE.user.user.uid,
+                name: FIREBASE.lastNoteName
+            }).then((res, err) => {
+                if (err) {
+                    UI.sendMessageInChat(error)
+                    setTimeout(() => $('auto-save').style.display = 'none', 0)
+                    return;
+                }
+                UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
+                setTimeout(() => $('auto-save').style.display = 'none', 0)
+                if (!localStorage.sentNote) {
+                    localStorage.sentNote = true;
+                    let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
+                    firstNoteAdv.show();
+                }
+            })
         }
     );
 }
@@ -341,6 +367,9 @@ const queryList = {
                 },
                 message() {
                     $('.gist').value = processedX[1]
+                },
+                episode() {
+                    $('#episode-picker').value = processedX[1]
                 }
             }
             if (availableSlots[processedX[0]]) {

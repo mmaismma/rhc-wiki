@@ -78,7 +78,7 @@
                         <div id="meta-info">
                             <label for="hermit-picker">Topic:
                                 <select id="hermit-picker" title="Choose Topic (Hermit/Other)">
-                                    <option value="none">--None--</option>
+                                    <option value="none">None</option>
                                     <option value="bdoubleo">BdoubleO</option>
                                     <option value="cubfan">Cubfan135</option>
                                     <option value="doc">Docm77</option>
@@ -111,7 +111,7 @@
 
                             <label for="season-picker">Season:
                                 <select id="season-picker" title="Choose Season">
-                                    <option value="none">--None--</option>
+                                    <option value="none">None</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -122,6 +122,8 @@
                                     <option value="8" selected>8</option>
                                 </select>
                             </label>
+
+                            <label>Episode: <input id="episode-picker" type="number" min="0" placeholder="Enter Ep Num"></label>
 
                             <label>
                                 Author:
@@ -315,8 +317,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
 
     <script>
         let firebaseConfig = {
