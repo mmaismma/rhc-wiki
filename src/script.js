@@ -335,7 +335,7 @@ const UI = {
         }
         show() {
             document.body.append(this.advBox)
-            UI.sendMessageInChat(`${FIREBASE.user.user.displayName} completed the advancement <span style="color:lime">[${this.advBox.children[2].textContent}]</span>`)
+            UI.sendMessageInChat(`${FIREBASE.user?.user?.displayName ?? 'You'} completed the advancement <span style="color:lime">[${this.advBox.children[2].textContent}]</span>`)
             setTimeout(() => this.advBox.style.right = '0px', 0)
             setTimeout(() => {
                 this.advBox.style.right = '';

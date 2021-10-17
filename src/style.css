@@ -149,9 +149,8 @@ nav {
 #meta-info {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     flex-direction: column;
-    gap: 10%;
     text-align: center;
 }
 
