@@ -37,12 +37,17 @@
     <background></background>
     <chat>
         <div style="display: none;" id="chat-history">
+            <h1>
+                <button id="close-chat-history" class="mc-bedrock-inbox" title="Close chat history">
+                    &times;
+                </button>
+                Chat
+            </h1>
             <div id="messages"></div>
             <chat-input>
                 <input id="message-input" autocomplete="off" title="Type your message here"
                     placeholder="Type your message here">
                 <button id="send-message" class="mc-java small" title="Send message">&check;</button>
-                <button id="close-chat-history" class="mc-java small" title="Close chat history">&times;</button>
             </chat-input>
         </div>
         <div id="live-chat">
@@ -65,7 +70,7 @@
         </nav>
 
         <footer>
-            <span>v1.2.3</span>
+            <span>v1.3</span>
             <span style="text-align: right;">Brought to you by mmaismma</span>
         </footer>
     </section>
@@ -78,50 +83,52 @@
                         <div id="meta-info">
                             <label for="hermit-picker">Topic:
                                 <select id="hermit-picker" title="Choose Topic (Hermit/Other)">
-                                    <option>--None--</option>
-                                    <option>BdoubleO</option>
-                                    <option>Cubfan</option>
-                                    <option>Doc</option>
-                                    <option>Etho</option>
-                                    <option>FalseSymmetry</option>
-                                    <option>Gemini</option>
-                                    <option>Grian</option>
-                                    <option>Hypnotizd</option>
-                                    <option>iJevin</option>
-                                    <option>Impulse</option>
-                                    <option>Iskall</option>
-                                    <option>JoeHills</option>
-                                    <option>Keralis</option>
-                                    <option>Mumbo</option>
-                                    <option>Pearl</option>
-                                    <option>Rendog</option>
-                                    <option>Scar</option>
-                                    <option>StressMonster</option>
-                                    <option>TangoTek</option>
-                                    <option>TinFoilChef</option>
-                                    <option>VintageBeef</option>
-                                    <option>Welsknight</option>
-                                    <option>xBCrafted</option>
-                                    <option>Xisuma</option>
-                                    <option>Zedaph</option>
-                                    <option>Cleo</option>
-                                    <option>Music</option>
+                                    <option value="none">None</option>
+                                    <option value="bdoubleo">BdoubleO</option>
+                                    <option value="cubfan">Cubfan135</option>
+                                    <option value="doc">Docm77</option>
+                                    <option value="etho">Etho</option>
+                                    <option value="falseSymmetry">FalseSymmetry</option>
+                                    <option value="gemini">GeminiTay</option>
+                                    <option value="grian">Grian</option>
+                                    <option value="hypnotizd">Hypnotizd</option>
+                                    <option value="ijevin">iJevin</option>
+                                    <option value="impulse">Impulse</option>
+                                    <option value="iskall">Iskall</option>
+                                    <option value="joehills">JoeHills</option>
+                                    <option value="keralis">Keralis</option>
+                                    <option value="mumbo">Mumbo</option>
+                                    <option value="pearl">Pearl</option>
+                                    <option value="rendog">Rendog</option>
+                                    <option value="scar">Scar</option>
+                                    <option value="stressmonster">StressMonster</option>
+                                    <option value="tangotek">TangoTek</option>
+                                    <option value="tinfoilchef">TinfoilChef</option>
+                                    <option value="vintagebeef">VintageBeef</option>
+                                    <option value="welsknight">Welsknight</option>
+                                    <option value="xbcrafted">xBCrafted</option>
+                                    <option value="xisuma">Xisuma</option>
+                                    <option value="zedaph">Zedaph</option>
+                                    <option value="cleo">ZombieCleo</option>
+                                    <option value="music">Music</option>
                                 </select>
                             </label>
 
                             <label for="season-picker">Season:
                                 <select id="season-picker" title="Choose Season">
-                                    <option>--None--</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option selected>8</option>
+                                    <option value="none">None</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8" selected>8</option>
                                 </select>
                             </label>
+
+                            <label>Episode: <input id="episode-picker" type="number" min="0" placeholder="Enter Ep Num"></label>
 
                             <label>
                                 Author:
@@ -129,14 +136,94 @@
                             </label>
 
                         </div>
-                        <div class="next-page" onclick="javascript: document.querySelector('#book-page-2').classList.remove('hidden');this.parentNode.parentNode.classList.add('hidden');"></div>
+                            <svg class="next-page" id="aaajjj" onclick="javascript: document.querySelector('#book-page-2').classList.remove('hidden');this.parentNode.parentNode.classList.add('hidden');" viewBox='0 0 200 100' xmlns='http://www.w3.org/2000/svg'>
+                                <g id="border" fill="#bcb099">
+                                    <rect width='80' height='10' x='120' y='0' />
+                                    <rect width='10' height='10' x='110' y='10' />
+                                    <rect width='10' height='10' x='120' y='20' />
+                                    <rect width='10' height='10' x='130' y='30' />
+                                    <rect width='10' height='10' x='120' y='40' />
+                                    <rect width='60' height='10' x='60' y='50' />
+                                    <rect width='10' height='10' x='50' y='40' />
+                                    <rect width='10' height='10' x='40' y='30' />
+                                    <rect width='10' height='10' x='30' y='20' />
+                                    <rect width='10' height='10' x='20' y='30' />
+                                    <rect width='10' height='10' x='10' y='40' />
+                                    <rect width='10' height='10' x='0' y='50' />
+                                    <rect width='10' height='10' x='10' y='60' />
+                                    <rect width='10' height='10' x='20' y='70' />
+                                    <rect width='10' height='10' x='30' y='80' />
+                                    <rect width='100' height='10' x='40' y='90' />
+                                    <rect width='10' height='10' x='140' y='80' />
+                                    <rect width='10' height='10' x='150' y='70' />
+                                    <rect width='10' height='10' x='160' y='60' />
+                                    <rect width='10' height='10' x='170' y='70' />
+                                    <rect width='10' height='10' x='180' y='80' />
+                                    <rect width='10' height='70' x='190' y='10' />
+                                </g>
+                                <g id="body" fill="#fbf3dd">
+                                    <rect width='70' height='10' x='120' y='10' />
+                                    <rect width='60' height='10' x='130' y='20' />
+                                    <rect width='50' height='10' x='140' y='30' />
+                                    <rect width='60' height='10' x='130' y='40' />
+                                    <rect width='70' height='10' x='120' y='50' />
+                                    <rect width='10' height='10' x='30' y='30' />
+                                    <rect width='30' height='10' x='20' y='40' />
+                                    <rect width='50' height='10' x='10' y='50' />
+                                    <rect width='140' height='10' x='20' y='60' />
+                                    <rect width='120' height='10' x='30' y='70' />
+                                    <rect width='100' height='10' x='40' y='80' />
+                                    <rect width='20' height='10' x='170' y='60' />
+                                    <rect width='10' height='10' x='180' y='70' />
+                                </g>
+                            </svg>
                     </div>
                 </div>
                 <div class="book hidden" id="book-page-2">
                     <div>
                         <textarea class="gist" title="Type your Note here" placeholder="Type your Note here"></textarea>
                         <auto-save style="display: none;"></auto-save>
-                        <div class="back-page" onclick="javascript: document.querySelector('#book-page-1').classList.remove('hidden');this.parentNode.parentNode.classList.add('hidden');"></div>
+                        <svg class="back-page" onclick="javascript: document.querySelector('#book-page-1').classList.remove('hidden');this.parentNode.parentNode.classList.add('hidden');" viewBox='0 0 200 100' xmlns='http://www.w3.org/2000/svg'>
+                                <g id="border" fill="#bcb099">
+                                    <rect width='80' height='10' x='120' y='0' />
+                                    <rect width='10' height='10' x='110' y='10' />
+                                    <rect width='10' height='10' x='120' y='20' />
+                                    <rect width='10' height='10' x='130' y='30' />
+                                    <rect width='10' height='10' x='120' y='40' />
+                                    <rect width='60' height='10' x='60' y='50' />
+                                    <rect width='10' height='10' x='50' y='40' />
+                                    <rect width='10' height='10' x='40' y='30' />
+                                    <rect width='10' height='10' x='30' y='20' />
+                                    <rect width='10' height='10' x='20' y='30' />
+                                    <rect width='10' height='10' x='10' y='40' />
+                                    <rect width='10' height='10' x='0' y='50' />
+                                    <rect width='10' height='10' x='10' y='60' />
+                                    <rect width='10' height='10' x='20' y='70' />
+                                    <rect width='10' height='10' x='30' y='80' />
+                                    <rect width='100' height='10' x='40' y='90' />
+                                    <rect width='10' height='10' x='140' y='80' />
+                                    <rect width='10' height='10' x='150' y='70' />
+                                    <rect width='10' height='10' x='160' y='60' />
+                                    <rect width='10' height='10' x='170' y='70' />
+                                    <rect width='10' height='10' x='180' y='80' />
+                                    <rect width='10' height='70' x='190' y='10' />
+                                </g>
+                                <g id="body" fill="#fbf3dd">
+                                    <rect width='70' height='10' x='120' y='10' />
+                                    <rect width='60' height='10' x='130' y='20' />
+                                    <rect width='50' height='10' x='140' y='30' />
+                                    <rect width='60' height='10' x='130' y='40' />
+                                    <rect width='70' height='10' x='120' y='50' />
+                                    <rect width='10' height='10' x='30' y='30' />
+                                    <rect width='30' height='10' x='20' y='40' />
+                                    <rect width='50' height='10' x='10' y='50' />
+                                    <rect width='140' height='10' x='20' y='60' />
+                                    <rect width='120' height='10' x='30' y='70' />
+                                    <rect width='100' height='10' x='40' y='80' />
+                                    <rect width='20' height='10' x='170' y='60' />
+                                    <rect width='10' height='10' x='180' y='70' />
+                                </g>
+                            </svg>
                     </div>
                 </div>
 
@@ -235,8 +322,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
 
     <script>
         let firebaseConfig = {

@@ -1,3 +1,8 @@
+const $ = (x, all) => {
+    if (all) return document.querySelectorAll(x);
+    return document.querySelector(x)
+}
+
 // Start Background Animation Saga
 const BACKGROUND = {
     camera: new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000),
@@ -7,7 +12,7 @@ const BACKGROUND = {
     init() {
         BACKGROUND.renderer.setPixelRatio(window.devicePixelRatio);
         BACKGROUND.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.querySelector('background').appendChild(BACKGROUND.renderer.domElement);
+        $('background').appendChild(BACKGROUND.renderer.domElement);
 
         let boxGeometry = new THREE.BoxGeometry(1, 1, 1);
         boxGeometry.applyMatrix4(new THREE.Matrix4().makeScale(-1, 1, 1));
@@ -54,6 +59,7 @@ BACKGROUND.animate();
 // End Background Animation Saga
 
 const FIREBASE = {
+    lastNoteName: '',
     uploadGist(data) {
         if (data.length > 2000) {
             return new Error('Data exceeds 2000 character limit');
@@ -66,12 +72,14 @@ const FIREBASE = {
             contentType: 'application/json',
         };
         const message = JSON.stringify({
-            'hermit': document.getElementById('hermit-picker').value,
-            'season': document.getElementById('season-picker').value,
-            'message': data
+            hermit: $('#hermit-picker').value,
+            season: $('#season-picker').value,
+            episode: $('#episode-picker').value,
+            message: data
         })
-        let user = FIREBASE.user.user ? FIREBASE.user.user.uid : 'anonymous'
-        let gistRef = storageRef.child('user-gists/' + user + '/' + Date.now() + '.json');
+        let user = FIREBASE.user.user ? FIREBASE.user.user.uid : 'anonymous';
+        FIREBASE.lastNoteName = Date.now() + '.json';
+        let gistRef = storageRef.child('user-gists/' + user + '/' + FIREBASE.lastNoteName);
         return gistRef.putString(message, undefined, metadata)
     },
     authProviders: {
@@ -105,12 +113,12 @@ const FIREBASE = {
             if (value) {
                 target[parameter] = value;
                 UI.sendMessageInChat(`Successfully signed in as ${target.user.displayName} (${target.user.email})`)
-                document.getElementById('sign-in-google').textContent = `Sign out of ${target.user.displayName}`;
-                document.getElementById('author').textContent = `${target.user.displayName}`;
+                $('#sign-in-google').textContent = `Sign out of ${target.user.displayName}`;
+                $('#author').textContent = `${target.user.displayName}`;
             } else {
                 target[parameter] = value;
-                document.getElementById('sign-in-google').textContent = 'Sign in with Google';
-                document.getElementById('author').textContent = `Anonymous`;
+                $('#sign-in-google').textContent = 'Sign in with Google';
+                $('#author').textContent = `Anonymous`;
                 UI.sendMessageInChat('Successfully signed out')
             }
         }
@@ -121,20 +129,23 @@ const FIREBASE = {
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         FIREBASE.user.user = user;
-        document.getElementById('sign-in-google').onclick = () => {
+        $('#sign-in-google').onclick = () => {
             FIREBASE.signOut()
         }
     } else {
-        document.getElementById('sign-in-google').onclick = () => {
+        $('#sign-in-google').onclick = () => {
             FIREBASE.authenticate(FIREBASE.authProviders.google)
         }
     }
 });
 
-document.getElementById('sign-book').onclick = () => {
-    setTimeout(() => document.querySelector('auto-save').style.display = '', 0)
+$('#sign-book').onclick = () => {
+    setTimeout(() => $('auto-save').style.display = '', 0)
     const response = FIREBASE.uploadGist(document.body.querySelector('.gist').value);
-    if (response instanceof Error) return UI.sendMessageInChat(response);
+    if (response instanceof Error) {
+        setTimeout(() => $('auto-save').style.display = 'none', 0)
+        return UI.sendMessageInChat(response);
+    }
     response.on(firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -142,16 +153,36 @@ document.getElementById('sign-book').onclick = () => {
         },
         (error) => {
             UI.sendMessageInChat(error)
-            setTimeout(() => document.querySelector('auto-save').style.display = 'none', 0)
+            setTimeout(() => $('auto-save').style.display = 'none', 0)
         },
         () => {
-            UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
-            setTimeout(() => document.querySelector('auto-save').style.display = 'none', 0)
-            if (!localStorage.sentNote) {
-                localStorage.sentNote = true;
-                let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
-                firstNoteAdv.show();
+            if (!FIREBASE.user.user) {
+                UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
+                setTimeout(() => $('auto-save').style.display = 'none', 0)
+                if (!localStorage.sentNote) {
+                    localStorage.sentNote = true;
+                    let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
+                    firstNoteAdv.show();
+                }
             }
+
+            firebase.firestore().collection(`episode-tracker-s${$('#season-picker').value}`).doc($('#hermit-picker').value).collection(`episode${$('#episode-picker').value}`).doc("informers").set({
+                id: FIREBASE.user.user.uid,
+                name: FIREBASE.lastNoteName
+            }).then((res, err) => {
+                if (err) {
+                    UI.sendMessageInChat(error)
+                    setTimeout(() => $('auto-save').style.display = 'none', 0)
+                    return;
+                }
+                UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
+                setTimeout(() => $('auto-save').style.display = 'none', 0)
+                if (!localStorage.sentNote) {
+                    localStorage.sentNote = true;
+                    let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
+                    firstNoteAdv.show();
+                }
+            })
         }
     );
 }
@@ -176,7 +207,7 @@ const commandList = {
     jeb_() {
         document.body.classList.add('jeb_')
         UI.jeb_Interval = setInterval(() => {
-            document.getElementById('theme-color-meta').content = window.getComputedStyle(document.body).outlineColor;
+            $('#theme-color-meta').content = window.getComputedStyle(document.body).outlineColor;
         }, 10)
     },
     Dinnerbone() {
@@ -185,24 +216,29 @@ const commandList = {
     Grumm() {
         document.body.style.transform = 'rotate(180deg)'
     },
-    'effect clear': () => {
-        document.body.style.transform = '';
+    effect(query) {
+        if (query[0] === 'clear') {
+            document.body.style.transform = '';
         
-        document.body.classList.remove('jeb_')
-        try {
-            clearInterval(UI.jeb_Interval);
-        } catch {}
-        UI.jeb_Interval = 0;
-        document.getElementById('theme-color-meta').content = "#2bda9d";
+            document.body.classList.remove('jeb_')
+            try {
+                clearInterval(UI.jeb_Interval);
+            } catch { }
+            UI.jeb_Interval = 0;
+            $('#theme-color-meta').content = "#2bda9d";
+        }
+    },
+    wiki(query) {
+        window.location.href = `https://rhc-wiki.web.app/wiki/${query[0]}`
     }
 }
 
 const UI = {
     changeScreen(toScreen, thenFn) {
-        [...document.getElementsByClassName('screen')].forEach(elm => {
+        [...$('.screen', true)].forEach(elm => {
             elm.classList.remove('active')
         })
-        document.getElementById(toScreen).classList.add('active')
+        $(`#${toScreen}`).classList.add('active')
         if (thenFn != false) {
             try {
                 Function('"use strict";return (' + thenFn + ')')()
@@ -218,10 +254,10 @@ const UI = {
         messageP.innerHTML = message;
         messagePLive.innerHTML = message;
 
-        document.getElementById('messages').append(messageP)
-        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
-        document.getElementById('live-chat').scrollTop = document.getElementById('live-chat').scrollHeight;
-        document.getElementById('live-chat').append(messagePLive)
+        $('#messages').append(messageP)
+        $('#messages').scrollTop = $('#messages').scrollHeight;
+        $('#live-chat').scrollTop = $('#live-chat').scrollHeight;
+        $('#live-chat').append(messagePLive)
 
         setTimeout(() => {
             messagePLive.style.opacity = 0;
@@ -232,7 +268,7 @@ const UI = {
     },
     toggleChatHistory(show) {
         if (show == undefined || show == null) {
-            if (document.getElementById('live-chat').style.display == 'none') {
+            if ($('#live-chat').style.display == 'none') {
                 UI.toggleChatHistory(false)
             } else {
                 UI.toggleChatHistory(true)
@@ -240,9 +276,9 @@ const UI = {
         }
 
         if (show === true) {
-            document.getElementById('live-chat').style.display = 'none';
-            document.getElementById('chat-history').style.display = '';
-            document.getElementById('message-input').focus();
+            $('#live-chat').style.display = 'none';
+            $('#chat-history').style.display = '';
+            $('#message-input').focus();
             if (!localStorage.openedChat) {
                 localStorage.openedChat = true;
                 let chatAdv = new UI.Advancement('assets/icons/chat-icon96x96.png', null, 'Open Chat');
@@ -250,18 +286,20 @@ const UI = {
             }
         }
         if (show === false) {
-            document.getElementById('live-chat').style.display = '';
-            document.getElementById('message-input').value = '';
-            document.getElementById('chat-history').style.display = 'none';
-            document.getElementById('message-input').blur();
+            $('#live-chat').style.display = '';
+            $('#message-input').value = '';
+            $('#chat-history').style.display = 'none';
+            $('#message-input').blur();
         }
 
     },
-    runCommand(command) {
-        if (!commandList[command.slice(1)]) {
+    runCommand(cmd) {
+        let command = cmd.slice(1).split(' ')
+        console.log(command)
+        if (!commandList[command[0]]) {
             return false;
         } else {
-            commandList[command.slice(1)]();
+            commandList[command[0]](command.slice(1));
             return true;
         }
     },
@@ -297,7 +335,7 @@ const UI = {
         }
         show() {
             document.body.append(this.advBox)
-            UI.sendMessageInChat(`${FIREBASE.user.user.displayName} completed the advancement <span style="color:lime">[${this.advBox.children[2].textContent}]</span>`)
+            UI.sendMessageInChat(`${FIREBASE.user?.user?.displayName ?? 'You'} completed the advancement <span style="color:lime">[${this.advBox.children[2].textContent}]</span>`)
             setTimeout(() => this.advBox.style.right = '0px', 0)
             setTimeout(() => {
                 this.advBox.style.right = '';
@@ -314,16 +352,41 @@ const queryList = {
     'context-post': () => {
         console.log('hh')
         window.location.replace('https://www.reddit.com/r/HermitCraft/comments/oz3zo0/operation_improve_the_rhermitcraft_wiki_2021/')
+    },
+    note(value) {
+        let processedValue = value.split(',')
+        console.log(processedValue)
+        processedValue.forEach(x => {
+            let processedX = x.split('=')
+            let availableSlots = {
+                topic() {
+                    $('#hermit-picker').value = processedX[1]
+                },
+                season() {
+                    $('#season-picker').value = processedX[1]
+                },
+                message() {
+                    $('.gist').value = processedX[1]
+                },
+                episode() {
+                    $('#episode-picker').value = processedX[1]
+                }
+            }
+            if (availableSlots[processedX[0]]) {
+                availableSlots[processedX[0]]()
+            }
+        })
+        UI.changeScreen('make-gist')
     }
 }
 
 try {
-    let queries = window.location.search.split('?')[1].split('&');
-    queries.forEach(query => {
-        if (queryList[query]) {
-            queryList[query]();
+    let queries = new URLSearchParams(window.location.search);
+    queries.forEach((value, key) => {
+        if (queryList[key]) {
+            queryList[key](value);
         }
-    })
+    });
 } catch (err) {
     console.log(err)
 }
@@ -338,14 +401,14 @@ document.onkeyup = (e) => {
 
     if (e.key.toLowerCase() == '/') {
         if (!(document.activeElement && ['input', 'select', 'button', 'textarea'].includes(document.activeElement.tagName.toLowerCase()))) {
-            document.getElementById('message-input').value = '/';
+            $('#message-input').value = '/';
             UI.toggleChatHistory();
         };
     }
 
     if (e.key == 'Enter') {
         if (document.activeElement.id === 'message-input') {
-            let message = document.getElementById('message-input').value;
+            let message = $('#message-input').value;
             if (message.length < 1) return;
             if (message.startsWith('/')) {
                 if (!UI.runCommand(message)) {
@@ -354,19 +417,19 @@ document.onkeyup = (e) => {
             } else {
                 UI.sendMessageInChat(message)
             }
-            document.getElementById('message-input').value = '';
+            $('#message-input').value = '';
         }
     }
 
     if (e.key == 'Escape') {
-        if (document.getElementById('live-chat').style.display == 'none') {
+        if ($('#live-chat').style.display == 'none') {
             UI.toggleChatHistory(false)
         }
     }
 }
 
-document.getElementById('send-message').onclick = () => {
-    let message = document.getElementById('message-input').value;
+$('#send-message').onclick = () => {
+    let message = $('#message-input').value;
     if (message.length < 1) return;
     if (message.startsWith('/')) {
         if (!UI.runCommand(message)) {
@@ -375,18 +438,18 @@ document.getElementById('send-message').onclick = () => {
     } else {
         UI.sendMessageInChat(message)
     }
-    document.getElementById('message-input').value = '';
+    $('#message-input').value = '';
 }
 
-document.getElementById('close-chat-history').onclick = () => {
+$('#close-chat-history').onclick = () => {
     UI.toggleChatHistory(false)
 }
 
-document.getElementById('open-chat').onclick = () => {
+$('#open-chat').onclick = () => {
     UI.toggleChatHistory(true)
 }
 
-[...document.getElementsByClassName('change-screen')].forEach(elm => {
+[...$('.change-screen', true)].forEach(elm => {
     elm.onclick = () => {
         const screenId = elm.dataset.toScreen.split(' ')[0];
         const thenFn = elm.dataset.toScreen.split(' ').slice(1).join(' ');
