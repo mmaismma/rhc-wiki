@@ -37,12 +37,17 @@
     <background></background>
     <chat>
         <div style="display: none;" id="chat-history">
+            <h1>
+                <button id="close-chat-history" class="mc-bedrock-inbox" title="Close chat history">
+                    &times;
+                </button>
+                Chat
+            </h1>
             <div id="messages"></div>
             <chat-input>
                 <input id="message-input" autocomplete="off" title="Type your message here"
                     placeholder="Type your message here">
                 <button id="send-message" class="mc-java small" title="Send message">&check;</button>
-                <button id="close-chat-history" class="mc-java small" title="Close chat history">&times;</button>
             </chat-input>
         </div>
         <div id="live-chat">

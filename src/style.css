@@ -303,9 +303,10 @@ footer {
 
 chat {
     width: 100%;
-    height: 200px;
+    height: 100%;
     position: fixed;
-    bottom: min(50px, 10%);
+    bottom: 0;
+    background: #0000;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -314,17 +315,30 @@ chat {
 }
 
 chat p {
-    background: #000a;
+    background: #0000;
     color: white;
     margin: 0;
     transition: opacity 1000ms linear;
-    font-size: 1.2em;
-    padding: 3px 2px;
+    font-size: 1.3em;
+    line-height: 1.1em;
+    padding: 0 4px 8px 8px;
     pointer-events: all;
 }
 
+chat p:before {
+    content: '>  ';
+}
+
+#live-chat {
+    background: #000a;
+    width: 70%;
+    margin-bottom: min(50px, 10%);
+}
+
 #chat-history {
+    background: #000a;
     width: 100%;
+    height: 100%;
     display: flex;
     overflow: auto;
     flex-direction: column;
@@ -333,23 +347,17 @@ chat p {
 }
 
 #messages {
-    display: flex;
     height: 100%;
-    flex-direction: column;
     overflow: auto;
+    padding: 10px 0;
 }
 
 chat-input {
     display: grid;
-    grid-template-columns: auto 40px 40px;
+    grid-template-columns: auto 80px;
     order: 1;
-    margin-top: 5px;
     pointer-events: all;
     flex-shrink: 0;
-}
-
-#live-chat {
-    width: 70%;
 }
 
 button.mc-java.small {
@@ -358,13 +366,29 @@ button.mc-java.small {
 }
 
 #message-input {
-    background: #000a;
-    border: 0;
+    background: #5e5e5e;
+    border: 3px inset #777;
     padding: 5px;
     color: white;
     font-size: 1.4em;
     font-family: inherit;
     border-radius: 0;
+}
+
+#chat-history h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 10px 0;
+    margin: 0;
+    width: 100%;
+    background: #c4c4c4;
+    font-family: mc-ten, monospace;
+    font-size: 1.6em;
+    letter-spacing: 1px;
+    color: #535353;
+    border-bottom: 3px inset #777;
 }
 
 #open-chat {
