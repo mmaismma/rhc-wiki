@@ -5,8 +5,11 @@ const previewer = $('#previewer')
 let path = 'user-gists/';
 
 const updateDimNotes = () => {
-    localStorage.getItem('dimNotes')?.split(',').forEach(dimNote => {
-        [...document.querySelectorAll(`[data-name="${dimNote}"]`)].forEach(elm => elm.classList.add('dimmed'))
+    localStorage.getItem('dimNotes')?.split(',').forEach(dimNoteRaw => {
+        let dimNote = dimNoteRaw.trim()
+        if (dimNote) {
+                [...document.querySelectorAll(`[data-name="${dimNote}"]`)].forEach(elm => elm.classList.add('dimmed'))
+        }
     })
     console.log('akak');
 }
