@@ -6,7 +6,7 @@ let path = 'user-gists/';
 
 const updateDimNotes = () => {
     localStorage.getItem('dimNotes')?.split(',').forEach(dimNote => {
-        [...document.querySelectorAll(`[data-name="${dimNote}"`)].forEach(elm => elm.classList.add('dimmed'))
+        [...document.querySelectorAll(`[data-name=${dimNote}]`)].forEach(elm => elm.classList.add('dimmed'))
     })
     console.log('akak');
 }
