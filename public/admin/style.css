@@ -101,6 +101,7 @@ button {
     font-size: 0.8em;
     font-weight: 500;
     cursor: pointer;
+    transition: background-color 100ms linear;
 }
 
 button:hover {
