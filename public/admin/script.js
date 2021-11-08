@@ -337,13 +337,13 @@ $('#copy').onclick = async () => {
 
 $('#dim').onclick = () => {
     let dimNotes = localStorage.getItem('dimNotes')
-    if (dimNotes.split(',').includes(UI.notes.selectedNote.elm.dataset.name)) {
+    if (dimNotes?.split(',').includes(UI.notes.selectedNote.elm.dataset.name)) {
         dimNotes = dimNotes.split(',')
         dimNotes.splice(dimNotes.indexOf(UI.notes.selectedNote.elm.dataset.name), 1);
         localStorage.setItem('dimNotes', dimNotes.join())
         UI.notes.selectedNote.elm.classList.remove('dimmed')
     } else {
-        localStorage.setItem('dimNotes', dimNotes + `,${UI.notes.selectedNote.elm.dataset.name}`)
+        localStorage.setItem('dimNotes', dimNotes ?? '' + `,${UI.notes.selectedNote.elm.dataset.name}`)
     }
     updateDimNotes()
 }
