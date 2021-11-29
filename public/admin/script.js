@@ -1,11 +1,15 @@
+//,1629931566004.json,1628950414367.json,1628599096385.json,1628685406436.json,1629013734144.json,1629121231273.json,1629202032538.json,1629375491470.json,1629452295506.json,1629452318877.json,1629630416932.json,1629976015731.json,1629981236454.json,1630236203665.json,1629026408705.json,1629721608758.json,1628676952825.json,1629069313130.json,1629222442965.json,1628445112592.json,1628445285179.json,1628576195976.json,1628576751706.json,1628651595618.json,1630674506518.json,1630674514400.json,1628611692463.json,1630851781259.json,1628802226809.json,1628965545749.json,1628705431298.json,1630075376655.json,1628953077338.json,1629676870127.json,1629933426865.json,1630884912122.json,1628853918108.json,1628898556629.json,1628636863941.json,1628792713985.json,1628905873081.json,1629224746590.json,1629594906509.json,1629645968254.json,1629833877882.json,1628966887149.json,1628954361877.json,1628869759532.json,1628601647993.json,1629392276362.json,1629477866701.json,1629639552022.json,1629667423210.json,1629924165592.json,1630249225945.json,1630443274222.json,1630443546080.json,1630615074819.json,1630771771551.json,1627923997175.json,1628315898861.json,1628438780507.json,1628469683642.json,1628801214802.json,1628843039575.json,1628843049348.json
 const $ = (x) => document.querySelector(x);
 const previewer = $('#previewer')
 
 let path = 'user-gists/';
 
 const updateDimNotes = () => {
-    localStorage.getItem('dimNotes')?.split(',').forEach(dimNote => {
-        [...document.querySelectorAll(`[data-name="${dimNote}"`)].forEach(elm => elm.classList.add('dimmed'))
+    localStorage.getItem('dimNotes')?.split(',').forEach(dimNoteRaw => {
+        let dimNote = dimNoteRaw.trim()
+        if (dimNote) {
+                [...document.querySelectorAll(`[data-name="${dimNote}"]`)].forEach(elm => elm.classList.add('dimmed'))
+        }
     })
     console.log('akak');
 }
@@ -336,13 +340,13 @@ $('#copy').onclick = async () => {
 
 $('#dim').onclick = () => {
     let dimNotes = localStorage.getItem('dimNotes')
-    if (dimNotes.split(',').includes(UI.notes.selectedNote.elm.dataset.name)) {
+    if (dimNotes?.split(',').includes(UI.notes.selectedNote.elm.dataset.name)) {
         dimNotes = dimNotes.split(',')
         dimNotes.splice(dimNotes.indexOf(UI.notes.selectedNote.elm.dataset.name), 1);
         localStorage.setItem('dimNotes', dimNotes.join())
         UI.notes.selectedNote.elm.classList.remove('dimmed')
     } else {
-        localStorage.setItem('dimNotes', dimNotes + `,${UI.notes.selectedNote.elm.dataset.name}`)
+        localStorage.setItem('dimNotes', dimNotes ?? '' + `,${UI.notes.selectedNote.elm.dataset.name}`)
     }
     updateDimNotes()
 }
