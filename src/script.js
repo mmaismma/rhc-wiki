@@ -59,27 +59,27 @@ BACKGROUND.animate();
 // End Background Animation Saga
 
 const FIREBASE = {
-    lastNoteName: '',
     uploadGist(data) {
-        if (data.length > 2000) {
-            return new Error('Data exceeds 2000 character limit');
+        if (data.length > 2000 || data.length < 8) {
+            return new Error(`Note cannot be ${data.length} characters long. It should be between 8 and 2000 characters long.`);
         }
-        if (data.length < 8) {
-            return new Error('Information should be atleast 8 characters long');
-        }
+
+        let user = FIREBASE.user.user?.uid || 'anonymous';
+
         const storageRef = firebase.storage().ref();
         const metadata = {
-            contentType: 'application/json',
+            contentType: 'text/plain',
+            customMetadata: {
+                hermit: $('#hermit-picker').value,
+                season: $('#season-picker').value,
+                episode: $('#episode-picker').value,
+                informer: user
+            }
         };
-        const message = JSON.stringify({
-            hermit: $('#hermit-picker').value,
-            season: $('#season-picker').value,
-            episode: $('#episode-picker').value,
-            message: data
-        })
-        let user = FIREBASE.user.user ? FIREBASE.user.user.uid : 'anonymous';
-        FIREBASE.lastNoteName = Date.now() + '.json';
-        let gistRef = storageRef.child('user-gists/' + user + '/' + FIREBASE.lastNoteName);
+
+        const message = data;
+
+        let gistRef = storageRef.child(`contributors/${$('#hermit-picker').value} E${$('#episode-picker').value} S${$('#season-picker').value}`);
         return gistRef.putString(message, undefined, metadata)
     },
     authProviders: {
@@ -141,11 +141,13 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 $('#sign-book').onclick = () => {
     setTimeout(() => $('auto-save').style.display = '', 0)
+
     const response = FIREBASE.uploadGist(document.body.querySelector('.gist').value);
     if (response instanceof Error) {
         setTimeout(() => $('auto-save').style.display = 'none', 0)
         return UI.sendMessageInChat(response);
     }
+
     response.on(firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -156,33 +158,13 @@ $('#sign-book').onclick = () => {
             setTimeout(() => $('auto-save').style.display = 'none', 0)
         },
         () => {
-            if (!FIREBASE.user.user) {
-                UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
-                setTimeout(() => $('auto-save').style.display = 'none', 0)
-                if (!localStorage.sentNote) {
-                    localStorage.sentNote = true;
-                    let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
-                    firstNoteAdv.show();
-                }
+            UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
+            setTimeout(() => $('auto-save').style.display = 'none', 0)
+            if (!localStorage.sentNote) {
+                localStorage.sentNote = true;
+                let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
+                firstNoteAdv.show();
             }
-
-            firebase.firestore().collection(`episode-tracker-s${$('#season-picker').value}`).doc($('#hermit-picker').value).collection(`episode${$('#episode-picker').value}`).doc("informers").set({
-                id: FIREBASE.user.user.uid,
-                name: FIREBASE.lastNoteName
-            }).then((res, err) => {
-                if (err) {
-                    UI.sendMessageInChat(error)
-                    setTimeout(() => $('auto-save').style.display = 'none', 0)
-                    return;
-                }
-                UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
-                setTimeout(() => $('auto-save').style.display = 'none', 0)
-                if (!localStorage.sentNote) {
-                    localStorage.sentNote = true;
-                    let firstNoteAdv = new UI.Advancement('assets/textures/ui/icon_sign96x96.webp', null, 'Sign your first note')
-                    firstNoteAdv.show();
-                }
-            })
         }
     );
 }
@@ -239,7 +221,7 @@ const UI = {
             elm.classList.remove('active')
         })
         $(`#${toScreen}`).classList.add('active')
-        if (thenFn != false) {
+        if (thenFn) {
             try {
                 Function('"use strict";return (' + thenFn + ')')()
             } catch (error) {
@@ -256,8 +238,8 @@ const UI = {
 
         $('#messages').append(messageP)
         $('#messages').scrollTop = $('#messages').scrollHeight;
-        $('#live-chat').scrollTop = $('#live-chat').scrollHeight;
         $('#live-chat').append(messagePLive)
+        $('#live-chat').scrollTop = $('#live-chat').scrollHeight;
 
         setTimeout(() => {
             messagePLive.style.opacity = 0;
