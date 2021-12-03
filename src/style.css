@@ -59,6 +59,7 @@ header img.title {
     font: normal 100 1.5em mc-seven;
     animation: boop 250ms infinite linear alternate;
     overflow: visible;
+    user-select: none;
 }
 
 @media (prefers-reduced-motion: reduced) {
@@ -188,7 +189,7 @@ option {
 }
 
 #make-gist .controls {
-    width: min(800px, 100%);
+    width: min(500px, 100%);
     display: flex;
     justify-content: space-between;
 }

@@ -79,7 +79,7 @@ const FIREBASE = {
 
         const message = data;
 
-        let gistRef = storageRef.child(`contributors/${$('#hermit-picker').value} E${$('#episode-picker').value} S${$('#season-picker').value}`);
+        let gistRef = storageRef.child(`notes/${$('#hermit-picker').value} E${$('#episode-picker').value} S${$('#season-picker').value}:${Date.now()}`);
         return gistRef.putString(message, undefined, metadata)
     },
     authProviders: {
@@ -158,7 +158,7 @@ $('#sign-book').onclick = () => {
             setTimeout(() => $('auto-save').style.display = 'none', 0)
         },
         () => {
-            UI.sendMessageInChat('Gist successfully sent to the server, thank you for contributing!')
+            UI.sendMessageInChat('Note successfully sent to the server, thank you for contributing!')
             setTimeout(() => $('auto-save').style.display = 'none', 0)
             if (!localStorage.sentNote) {
                 localStorage.sentNote = true;
@@ -440,9 +440,3 @@ $('#open-chat').onclick = () => {
     }
 })
 UI.sendMessageInChat('Press "T" or "Open Chat" to open chat')
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js', {
-        scope: './'
-    });
-}
