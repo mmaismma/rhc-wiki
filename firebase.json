@@ -14,6 +14,10 @@
       "source": "/wiki/:page",
       "destination": "https://www.reddit.com/r/HermitCraft/wiki/:page",
       "type": 302
+    }, {
+      "source": "/context-post",
+      "destination": "https://www.reddit.com/r/HermitCraft/comments/rtl076/operation_improve_the_rhermitcraft_wiki_2022/",
+      "type": 302
     }]
   }
 }
