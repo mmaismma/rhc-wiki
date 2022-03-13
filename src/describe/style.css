@@ -1,28 +1,7 @@
 html {
     --positive-green: #27993e;
     --negative-red: #f8513d;
-    --fancy-blue: #1a66d7;
-
-    --color-scale-black: #1b1f23;
-    --color-scale-white: #fff;
-    --color-scale-gray-0: #fafbfc;
-    --color-scale-gray-1: #f6f8fa;
-    --color-scale-gray-2: #e1e4e8;
-    --color-scale-gray-3: #d1d5da;
-    --color-scale-gray-4: #959da5;
-    --color-scale-gray-5: #6a737d;
-    --color-scale-gray-6: #586069;
-    --color-scale-gray-7: #444d56;
-    --color-scale-gray-8: #2f363d;
-    --color-scale-gray-9: #24292e;
-    --color-header-bg: hsl(210, 22%, 12%);
-    color-scheme: dark;
-}
-
-html[data-light-mode="true"] {
-    --positive-green: #27993e;
-    --negative-red: #f8513d;
-    --fancy-blue: #1a66d7;
+    --fancy-blue: hsl(216, 100%, 80%);
 
     --color-scale-white: #1b1f23;
     --color-scale-black: #fff;
@@ -45,6 +24,20 @@ html[data-light-mode="true"] {
     overflow: hidden;
 }
 
+#options details {
+    display: flex;
+    margin: 0 5px 10px 5px;
+}
+
+content {
+    height: 100%;
+    grid-area: content;
+    display: grid;
+    grid-template-areas:
+        "nav main";
+    grid-auto-columns: 200px auto;
+}
+
 html,
 body {
     width: 100%;
@@ -59,9 +52,10 @@ body {
 
 body {
     display: grid;
-    grid-template-areas: "head head""nav main""nav logger";
-    grid-template-rows: 40px auto max(20px, 20%);
-    grid-template-columns: min(30%, 200px);
+    grid-template-areas:
+        "head"
+        "content";
+    grid-auto-rows: 40px auto;
 }
 
 h1 {
@@ -76,9 +70,9 @@ header {
     width: 100%;
     background-color: var(--color-header-bg);
     padding: 5px 10px;
-    display: grid;
+    display: flex;
     align-items: center;
-    grid-template-columns: max-content auto;
+    justify-content: space-between;
     grid-area: head;
     color: #fff;
 }
@@ -87,29 +81,47 @@ header #sign-in-google {
     line-height: 10px;
     height: 20px;
     justify-self: right;
+    background: var(--color-scale-gray-2);
 }
 
 nav {
     background-color: var(--color-scale-gray-9);
-    padding: 5px;
     overflow: auto;
     grid-area: nav;
     display: flex;
     flex-direction: column;
 }
 
-nav button {
-    min-height: 25px;
+#notes-holder {
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    height: -webkit-fill-available;
+    resize: both;
+    min-width: 100%;
+    width: 100%;
+    gap: 2px;
+    overflow: auto;
+}
+
+#notes-holder button {
+    min-height: 32px;
     line-height: 100%;
+    margin: 0;
+}
+
+nav #options {
+    min-height: 100px;
+    overflow: auto;
+    font-size: 0.8em;
 }
 
 button {
     line-height: 100%;
-    background-color: #7777;
-    margin: 2.5px 2px;
-    border-radius: 4px;
+    margin: 2px 2px;
     padding: 5px;
     border: 0;
+    border-radius: 0;
     text-align: left;
     color: inherit;
     font: inherit;
@@ -119,37 +131,23 @@ button {
 }
 
 button:hover {
-    background-color: #777;
+    background-color: #cee8ff;
 }
 
 main {
     grid-area: main;
-    display: grid;
-    grid-template-rows: auto 40px 30px;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    grid-template-rows: auto 40px;
 }
 
 main textarea {
-    background-color: var(--color-scale-gray-9);
-    border: 1px solid var(--color-scale-gray-8);
+    background-color: var(--color-scale-gray-8);
+    border: 0;
+    border-radius: 0;
     resize: vertical;
     height: 100%;
     overflow: auto;
-}
-
-main controls {
-    display: flex;
-    align-items: center;
-}
-
-main controls #done:hover {
-    background-color: var(--positive-green);
-    color: #fff;
-}
-
-main controls #invalid:hover {
-    background-color: var(--negative-red);
-    color: #fff;
 }
 
 related-links {
@@ -158,10 +156,11 @@ related-links {
     flex-wrap: wrap;
     gap: 10px;
     font-variant: all-small-caps;
+    min-height: 20px;
 }
 
 logger {
-    grid-area: logger;
+    height: 30px;
     background: var(--color-scale-gray-8);
     overflow: auto;
     font-size: 0.8em;
@@ -191,17 +190,17 @@ button.loading {
     animation: loading-div 5s linear infinite;
 }
 
-nav button.selected {
+#notes-holder button.selected {
     background-color: var(--fancy-blue);
 }
 
-nav button.yellowed {
+#notes-holder button.yellowed {
     color: yellow;
 }
-nav button.pinked {
+#notes-holder button.pinked {
     color: magenta;
 }
-nav button.yellowed.pinked {
+#notes-holder button.yellowed.pinked {
     color: lime;
 }
 

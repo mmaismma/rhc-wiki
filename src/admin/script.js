@@ -196,6 +196,7 @@ const UI = {
                     $('nav items').append(tempButton);
                 });
                 updateDimNotes()
+                target[property] = value;
             }
         }
     })
