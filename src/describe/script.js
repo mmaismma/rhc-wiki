@@ -64,14 +64,13 @@ const UI = {
             }
         }
     },
-    hideParameters: localStorage.getItem('describe-hideParameters')?.split(',') || ["mmaismma"],
+    hideParameters: ["mmaismma"],
     toggleNoteVisibility: {
         update(parameter, visible) {
             if (visible) {
                 UI.hideParameters.splice(UI.hideParameters.indexOf(parameter), 1);
             } else {
                 UI.hideParameters.push(parameter);
-                localStorage.setItem('describe-hideParameters', UI.hideParameters.join())
             }
             [...$('#notes-holder').children].forEach(elm => {
                 for (let i = 0; i < UI.hideParameters.length; i++) {
