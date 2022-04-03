@@ -60,8 +60,8 @@ BACKGROUND.animate();
 
 const FIREBASE = {
     uploadGist(data) {
-        if (data.length > 2000 || data.length < 8) {
-            return new Error(`Note cannot be ${data.length} characters long. It should be between 8 and 2000 characters long.`);
+        if (data.length > 8000 || data.length < 8) {
+            return new Error(`Note cannot be ${data.length} characters long. It should be between 8 and 8000 characters long.`);
         }
 
         let user = FIREBASE.user.user?.uid || 'anonymous';
@@ -333,7 +333,7 @@ const queryList = {
     },
     'context-post': () => {
         console.log('hh')
-        window.location.replace('https://www.reddit.com/r/HermitCraft/comments/oz3zo0/operation_improve_the_rhermitcraft_wiki_2021/')
+        window.location.replace('https://www.reddit.com/r/HermitCraft/comments/rtl076/operation_improve_the_rhermitcraft_wiki_2022/')
     },
     note(value) {
         let processedValue = value.split(',')
