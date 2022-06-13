@@ -59,13 +59,13 @@ header > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: clamp(384px, 90vw, 900px);
+    width: min(90vw, 900px);
     margin: auto;
 }
 
 form {
     padding: 16px 0;
-    width: clamp(400px, 90vw, 900px);
+    width: min(90vw, 900px);
     margin: auto;
 }
 
@@ -308,7 +308,7 @@ input[type=button].mini {
     gap: 16px;
     align-items: center;
     justify-content: space-between;
-    width: clamp(384px, 90vw, 900px);
+    width: min(90vw, 900px);
     margin: auto;
 }
 
