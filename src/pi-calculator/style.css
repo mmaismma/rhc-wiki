@@ -59,13 +59,13 @@ header > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: min(calc(100vw - 16px), 900px);
+    width: min(calc(100% - 16px), 900px);
     margin: auto;
 }
 
 form {
     padding: 16px 0;
-    width: min(calc(100vw - 16px), 900px);
+    width: min(calc(100% - 16px), 900px);
     margin: auto;
 }
 
@@ -308,7 +308,7 @@ input[type=button].mini {
     gap: 16px;
     align-items: center;
     justify-content: space-between;
-    width: min(calc(100vw - 16px), 900px);
+    width: min(calc(100% - 16px), 900px);
     margin: auto;
 }
 
