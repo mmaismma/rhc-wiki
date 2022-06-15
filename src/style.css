@@ -59,6 +59,7 @@ header img.title {
     font: normal 100 1.5em mc-seven;
     animation: boop 250ms infinite linear alternate;
     overflow: visible;
+    user-select: none;
 }
 
 @media (prefers-reduced-motion: reduced) {
@@ -114,7 +115,7 @@ nav {
     width: min(500px, 100%);
     image-rendering: pixelated;
     border: 20px solid blue;
-    border-image: url(assets/textures/book/book.png) repeat 70 fill / 100px;
+    border-image: url(assets/textures/book/book.png) repeat 90 fill / 100px;
     /* border-image: url(assets/textures/book/book_frame.png) 20 fill / 90px; Bedrock Edition Book frame*/
     position: relative;
     display: block;
@@ -130,7 +131,7 @@ nav {
     top: 5%;
     left: 8%;
     bottom: 8%;
-    width: 83%;
+    width: 82%;
 }
 
 .gist,
@@ -188,7 +189,7 @@ option {
 }
 
 #make-gist .controls {
-    width: min(800px, 100%);
+    width: min(500px, 100%);
     display: flex;
     justify-content: space-between;
 }
@@ -249,8 +250,9 @@ main h1 {
     font-family: mc-ten, mono;
     letter-spacing: 1px;
     text-align: center;
-    background: #c4c4c4;
+    background: #e7e9ed;
     color: #535353;
+    text-shadow: 0.05em 0.06em 0.07em #0005;
     padding: 20px 0;
     margin: 0;
     position: relative;
@@ -383,11 +385,12 @@ button.mc-java.small {
     padding: 10px 0;
     margin: 0;
     width: 100%;
-    background: #c4c4c4;
+    background: #e7e9ed;
     font-family: mc-ten, monospace;
     font-size: 1.6em;
     letter-spacing: 1px;
     color: #535353;
+    text-shadow: 0.05em 0.06em 0.07em #0005;
     border-bottom: 3px inset #777;
 }
 
