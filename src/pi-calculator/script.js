@@ -111,24 +111,6 @@ function updatePI() {
         }[weaponType]
     }[$('[name=melee-weapon]:checked').value] || 0;
     
-    // if (meleeWeapon == 'axe') {
-    //     meleeWeapon = {
-    //         wood: 2.8 + (sharpness + strength) * 0.4,
-    //         gold: 3.5 + (sharpness + strength) * 0.5,
-    //         stone: 3.6 + (sharpness + strength) * 0.4,
-    //         iron: 4.05 + (sharpness + strength) * 0.45,
-    //         diamond: 4.5 + (sharpness + strength) * 0.5
-    //     }[weaponType];
-    // } else if (meleeWeapon == 'sword') {
-    //     meleeWeapon = {
-    //         wood: 3.2 + (sharpness + strength) * 0.8,
-    //         gold: 3.2 + (sharpness + strength) * 0.8,
-    //         stone: 4 + (sharpness + strength) * 0.8,
-    //         iron: 4.8 + (sharpness + strength) * 0.8,
-    //         diamond: 5.6 + (sharpness + strength) * 0.8
-    //     }[weaponType];
-    // } else { meleeWeapon = 0 };
-    
     const health = (hp
         + (((6 * gapples) + (3 * sussyStews) + (4 * health1pots) + (8 * health2pots)) / ((gapples + sussyStews + health1pots + health2pots) ** (1 / 3)) || 0)
         + (notchApple ? 24/(4 ** (1/3)) : 0))
