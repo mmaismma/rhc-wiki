@@ -9,7 +9,7 @@
 
     <meta property="og:site_name" content="FIU Power Index Calculator" />
     <meta name="description"
-        content="An elegant UI to r/FIUHC's PI calculator spreadsheet. FIUs are fan-made championships that run alongside Mindcrack and Hermitcraft UHCs. FIUs work around a number called Power Index (PI) which is based on each player's inventory. PIs show a player's readyness to combat at a given moment. This webpage can be used to generate PIs. From the Operation Improve The Wiki team." />
+        content="An elegant UI to r/FIUHC's PI calculator. FIUs are fan-made championships that run alongside Minecraft UHCs. FIUs work around a number called Power Index (PI) which shows each player's combat-readiness at any given moment. This webpage can be used to calculate PIs. From the Operation Improve The Wiki team." />
     <meta property="og:url" content="https://rhc-wiki.web.app/pi-calculator" />
     <meta property="og:image" content="https://rhc-wiki.web.app/pi-calculator/favicon.png" />
     <meta property="og:locale" content="en_US" />
@@ -37,7 +37,7 @@
             <h1>Health</h1>
             <line>
                 <span>Hitpoints:<helptext>Include any temporary health. Each full HUD heart counts as 2 points.</helptext></span>
-                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="hitpoints" type="number" min="0" max="20" value="20" aria-label="Hitpoints"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="hitpoints" type="number" min="0" value="20" aria-label="Hitpoints"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
             </line>
             <line>No. of Golden Apples:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="gapples" type="number" min="0" value="0" aria-label="Golden apples"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
             <line>No. of Suspicious Stews:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="sussy-stews" type="number" min="0" value="0" aria-label="Suspicious stews"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
