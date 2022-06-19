@@ -9,11 +9,11 @@
 
     <meta property="og:site_name" content="FIU Power Index Calculator" />
     <meta name="description"
-        content="An elegant UI to r/FIUHC's PI calculator spreadsheet. FIUs (Fédération Internationale de l'Ultra Hardcore) are Formula 1-inspired fan-made championships that run alongside Mindcrack and Hermitcraft UHCs. These chamipinships compete the players against each other based on the gear they are holding. Each player's inventory is noted at certain intervals and a formula generates a single number which shows the player's readiness to combat. This webpage can be used to generate that number. From the Operation Improve The Wiki team." />
-    <meta property="og:url" content="https://rhc-wiki.web.app/" />
+        content="An elegant UI to r/FIUHC's PI calculator spreadsheet. FIUs are fan-made championships that run alongside Mindcrack and Hermitcraft UHCs. FIUs work around a number called Power Index (PI) which is based on each player's inventory. PIs show a player's readyness to combat at a given moment. This webpage can be used to generate PIs. From the Operation Improve The Wiki team." />
+    <meta property="og:url" content="https://rhc-wiki.web.app/pi-calculator" />
     <meta property="og:image" content="https://rhc-wiki.web.app/pi-calculator/favicon.png" />
     <meta property="og:locale" content="en_US" />
-    <link rel="canonical" href="https://rhc-wiki.web.app/" />
+    <link rel="canonical" href="https://rhc-wiki.web.app/pi-calculator" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="FIU Power Index Calculator" />
     <meta name="apple-mobile-web-app-status-bar-style" content="#2da54e" />
@@ -28,119 +28,134 @@
         <div>FIU PI Calculator
             <div>
                 <input type="button" class="mini" value="i" onclick="$('main').style.display = 'flex'">
-                <input type="button" class="mini" value="C" onclick="$('form').reset()">
+                <input type="button" class="mini" value="×" onclick="$('form').reset()">
             </div>
         </div>
     </header>
     <form>
         <section id="sec-health">
             <h1>Health</h1>
-            <label>
+            <line>
                 <span>Hitpoints:<helptext>Include any temporary health. Each full HUD heart counts as 2 points.</helptext></span>
-                <input id="hitpoints" type="number" min="0" max="20" value="20">
-            </label>
-            <label>No. of Golden Apples:<input id="gapples" type="number" min="0" value="0"></label>
-            <label>No. of Health I Potions:<input id="health-1-pots" type="number" min="0" value="0"></label>
-            <label>No. of Health II Potions:<input id="health-2-pots" type="number" min="0" value="0"></label>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="hitpoints" type="number" min="0" max="20" value="20"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line>
+            <line>No. of Golden Apples:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="gapples" type="number" min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+            <line>No. of Suspicious Stews:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="sussy-stews" type="number" min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+            <line>No. of Health I Potions:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="health-1-pots" type="number" min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+            <line>No. of Health II Potions:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="health-2-pots" type="number" min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
         </section>
 
         <section id="sec-sword">
-            <h1>Sword</h1>
+            <h1>Melee weapon</h1>
             
+            <p>Weapon type:</p>
             <div class="radio">
-                <label><input name="sword" value="1" type="radio" checked><span>None</span></label>
-                <label><input name="sword" value="5" type="radio"><span>Wood</span></label>
-                <label><input name="sword" value="6" type="radio"><span>Stone</span></label>
-                <label><input name="sword" value="7" type="radio"><span>Iron</span></label>
-                <label><input name="sword" value="5" type="radio"><span>Gold</span></label>
-                <label><input name="sword" value="8" type="radio"><span>Blue</span></label>
+                <input name="melee-weapon" value="none" aria-label="None" type="radio" checked>
+                <input name="melee-weapon" value="axe" aria-label="Axe" type="radio">
+                <input name="melee-weapon" value="sword" aria-label="Sword" type="radio">
+            </div>
+
+            <p>Axe/Sword type:</p>
+            <div class="radio">
+                <input name="weapon-type" value="wood" type="radio" aria-label="Wood" checked>
+                <input name="weapon-type" value="stone" type="radio" aria-label="Stone">
+                <input name="weapon-type" value="iron" type="radio" aria-label="Iron">
+                <input name="weapon-type" value="gold" type="radio" aria-label="Gold">
+                <input name="weapon-type" value="diamond" type="radio" aria-label="Blue">
             </div>
 
             <div class="range">
-                <p>Sharpness level</p>
-                <input id="sharpness" type="range" min="0" max="5" value="0">
-                <div>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                </div>
+                <label>Sharpness level
+                <input id="sharpness" type="range" min="0" max="5" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </label>
             </div>
 
             <div class="range">
-                <p>Knockback level</p>
-                <input id="knockback" type="range" min="0" max="2" value="0">
-                <div>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                </div>
+                <label>Knockback level
+                <input id="knockback" type="range" min="0" max="2" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span></div>
+                </label>
             </div>
 
             <div class="range">
-                <p>Fire Aspect level</p>
-                <input id="fire-aspect" type="range" min="0" max="2" value="0">
-                <div>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                </div>
+                <label>Fire Aspect level
+                <input id="fire-aspect" type="range" min="0" max="2" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span></div>
+                </label>
             </div>
         </section>
 
         <section id="sec-bow">
             <h1>Bow</h1>
 
-            <label>Has one? <input id="has-bow" type="checkbox"><span></span></label>
-            <label>
-                <span>Arrow count:<helptext>If more than 64 or Infinity, enter 64.</helptext></span>
-                <input id="arrow-count" type="number" min="0" max="64" value="0">
-            </label>
+            <p>Arrow count:<helptext>If more than 64, enter 64.</helptext></p>
+            <ul>
+            <li><line>
+                <span>Regular arrows:</span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="regular-arrow-count" type="number" min="0" max="64" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line></li>
+            
+            <li><line>
+                <span>Spectral arrows:</span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="spectral-arrow-count" type="number" min="0" max="64" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line></li>
+
+            <li><line>
+                <span>Poison arrows:</span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="poison-arrow-count" type="number" min="0" max="64" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line></li>
+            
+            <li><line>
+                <span>Harming arrows:</span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="harming-arrow-count" type="number" min="0" max="64" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line></li>
+            
+            <li><line>
+                <span>Weakness arrows:</span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="weakness-arrow-count" type="number" min="0" max="64" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line></li>
+            
+            <li><line>
+                <span>Slowness arrows:</span>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="slowness-arrow-count" type="number" min="0" max="64" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line></li>
+            </ul>
             
             <div class="range">
-                <p>Power level</p>
-                <input id="power" type="range" min="0" max="5" value="0">
-                <div>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                </div>
+                <label>Power level
+                <input id="power" type="range" min="0" max="5" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                </label>
             </div>
-
-            <div class="range">
-                <p>Punch level</p>
-                <input id="punch" type="range" min="0" max="2" value="0">
-                <div>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                </div>
-            </div>
-
-            <label>Flame? <input id="flame" type="checkbox"><span></span></label>
-        </section>
-
-        <section id="sec-other">
-            <h1>Other</h1>
-
-            <label>Lava Bucket/Flint & Steel?<input id="lava" type="checkbox"><span></span></label>
             
-            <label>Water Bucket<input id="water" type="checkbox"><span></span></label>
-
-            <label>No. of Dogs:<input id="dogs" type="number" min="0" value="0"></label>
+            <div class="range">
+                <label>Punch level
+                <input id="punch" type="range" min="0" max="2" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span></div>
+                </label>
+            </div>
+            
+            <label>Flame? <input id="flame" type="checkbox"></label>
         </section>
 
+        <section id="sec-crossbow">
+            <h1>Crossbow</h1>
+
+            <label>Has one? <input id="crossbow" type="checkbox"></label>
+            
+            <line>Firework count: <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="firework-count" type="number" min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+            
+            <line>Firework stars: <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="firework-stars" type="number"  min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+        </section>
         <section id="sec-armour">
             <h1>Armour</h1>
-            <label>
+            <line>No. of diamond armour:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="diamond-pieces" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+
+            <line>
                 <span>Armour points:<helptext>Each full HUD chestplate equals 2 points.</helptext></span>
-                <input id="armour" type="number" min="0" max="20" value="20">
-            </label>
+                <span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="armour" type="number" min="0" max="20" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span>
+            </line>
 
             <table>
                 <thead>
@@ -153,74 +168,114 @@
                 <tbody>
                     <tr>
                         <th>Protection</th>
-                        <td><input id="head-protection" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="torso-protection" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="legs-protection" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="feet-protection" type="number" min="0" max="5" value="0"></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="head-protection" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="torso-protection" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="legs-protection" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="feet-protection" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
                     </tr>
                     <tr>
-                        <th>Projectile Protec.</th>
-                        <td><input id="head-projectile" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="torso-projectile" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="legs-projectile" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="feet-projectile" type="number" min="0" max="5" value="0"></td>
+                        <th>Projectile Protection</th>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="head-projectile" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="torso-projectile" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="legs-projectile" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="feet-projectile" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
                     </tr>
                     <tr>
                         <th>Fire Protection</th>
-                        <td><input id="head-fireprotec" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="torso-fireprotec" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="legs-fireprotec" type="number" min="0" max="5" value="0"></td>
-                        <td><input id="feet-fireprotec" type="number" min="0" max="5" value="0"></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="head-fireprotec" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="torso-fireprotec" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="legs-fireprotec" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="feet-fireprotec" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
                     </tr>
                     <tr>
-                        <th>Feather Fall.</th>
-                        <td><input id="head-featherfall" type="number" min="0" max="4" value="0"></td>
-                        <td><input id="torso-featherfall" type="number" min="0" max="4" value="0"></td>
-                        <td><input id="legs-featherfall" type="number" min="0" max="4" value="0"></td>
-                        <td><input id="feet-featherfall" type="number" min="0" max="4" value="0"></td>
+                        <th>Feather Falling</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="feet-featherfall" type="number" min="0" max="4" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="range">
-                <p>Thorns level</p>
-                <input id="thorns" type="range" min="0" max="3" value="0">
-                <div>
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                </div>
+                <label>Thorns level
+                <input id="thorns" type="range" min="0" max="3" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span><span>3</span></div>
+                </label>
+            </div>
+            <div class="range">
+                <label>Frost Walker level
+                <input id="frost-walker" type="range" min="0" max="2" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span></div>
+            </label>
+            </div>
+            <div class="range">
+                <label>Depth Strider level
+                <input id="depth-strider" type="range" min="0" max="3" value="0" oninput="this.style.backgroundSize = (this.value - this.min) / (this.max - this.min) * 100 + '%'">
+                <div><span>0</span><span>1</span><span>2</span><span>3</span></div>
+                </label>
             </div>
         </section>
 
+        <section id="sec-other">
+            <h1>Other</h1>
+
+            <label>Lava Bucket/Flint & Steel?<input id="lava" type="checkbox"></label>
+            
+            <label>Water Bucket<input id="water" type="checkbox"></label>
+            
+            <line>No. of Dogs:<span><input class="spinner" tabindex="-1" type="button" value="-" onclick="this.nextSibling.value = Math.max(this.nextSibling.value*1 - 1, this.nextSibling.min*1);"><input id="dogs" type="number" min="0" value="0"><input class="spinner" tabindex="-1" type="button" value="+" onclick="this.previousSibling.value = Math.min(this.previousSibling.value*1 + 1, this.previousSibling.max*1 || Infinity);"></span></line>
+
+            <label>Axe?<input id="axe" type="checkbox"></label>
+
+            <label>Shield?<input id="shield" type="checkbox"></label>
+        </section>
+      
         <section id="sec-potions">
             <h1>Potions and Notch Apples</h1>
 
-            <label>Notch Apple<input id="notch-apple" type="checkbox"><span></span></label>
+            <label>Notch Apple<input id="notch-apple" type="checkbox"></label>
 
-            <label>Speed/Speed++<input id="speed" type="checkbox"><span></span></label>
-            <label>Speed II<input id="speed2" type="checkbox"><span></span></label>
+            <label>Totem of Undying<input id="totem-of-undying" type="checkbox"></label>
 
-            <label>Fire Resistance/++<input id="fire-res" type="checkbox"><span></span></label>
+            <p>Speed</p>
+            <div class="radio">
+                <input name="speed" value="0" type="radio" aria-label="None" checked>
+                <input name="speed" value="speed1" type="radio" aria-label="Speed I">
+                <input name="speed" value="speed2" type="radio" aria-label="Speed II">
+            </div>
+
+            <p>Strength</p>
+            <div class="radio">
+                <input name="strength" value="0" type="radio" aria-label="None" checked>
+                <input name="strength" value="strength1" type="radio" aria-label="Strength I">
+                <input name="strength" value="strength2" type="radio" aria-label="Strength II">
+            </div>
+
+            <p>Harming</p>
+            <div class="radio">
+                <input name="harming" value="0" type="radio" aria-label="None" checked>
+                <input name="harming" value="harming1" type="radio" aria-label="Harming I">
+                <input name="harming" value="harming2" type="radio" aria-label="Harming II">
+            </div>
+
+            <p>Poison</p>
+            <div class="radio">
+                <input name="poison" value="0" type="radio" aria-label="None" checked>
+                <input name="poison" value="poison1" type="radio" aria-label="Poison I">
+                <input name="poison" value="poison-extended" type="radio" aria-label="Poison ++">
+                <input name="poison" value="poison2" type="radio" aria-label="Poison II">
+            </div>
+
+            <label>Fire Resistance<input id="fire-res" type="checkbox"></label>
             
-            <label>Night Vision/++<input id="night-vis" type="checkbox"><span></span></label>
+            <label>Night Vision<input id="night-vis" type="checkbox"></label>
             
-            <label>Strength/++<input id="strength" type="checkbox"><span></span></label>
-            <label>Strength II<input id="strength2" type="checkbox"><span></span></label>
+            <label>Invisibility<input id="invis" type="checkbox"></label>
             
-            <label>Invisibility/++<input id="invis" type="checkbox"><span></span></label>
+            <label>Weakness/++<input id="weak" type="checkbox"></label>
             
-            <label>Poison<input id="poison" type="checkbox"><span></span></label>
-            <label>Poison++<input id="poison-ex" type="checkbox"><span></span></label>
-            <label>Poison II<input id="poison2" type="checkbox"><span></span></label>
-            
-            <label>Weakness/++<input id="weak" type="checkbox"><span></span></label>
-            
-            <label>Slowness/++<input id="slow" type="checkbox"><span></span></label>
-            
-            <label>Harming/++<input id="harming" type="checkbox"><span></span></label>
-            <label>Harming II<input id="harming2" type="checkbox"><span></span></label>
+            <label>Slowness/++<input id="slow" type="checkbox"></label>
         </section>
     </form>
 
@@ -238,9 +293,9 @@
             <div id="controls">
                 <input type="button" class="title" value="Copy PI" onclick="
                     event.preventDefault();
-                    try{
+                    try {
                         navigator.clipboard.writeText($('#pi').textContent).then(() => {
-                            this.value = `Copied! :)`;
+                            this.value = $('#pi').textContent == 69 ? `Nice! ;)` : `Copied! :)`;
                             this.pointerEvents = 'none';
                             setTimeout(() => {this.value = 'Copy PI';this.style.pointerEvents = '';}, 3000)
                         })
