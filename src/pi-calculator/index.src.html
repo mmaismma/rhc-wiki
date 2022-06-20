@@ -293,9 +293,10 @@
             <div id="controls">
                 <input type="button" class="title" value="Copy PI" onclick="
                     event.preventDefault();
+                    setTimeout(()=>{
                     try {
                         navigator.clipboard.writeText($('#pi').textContent).then(() => {
-                            this.value = $('#pi').textContent.startsWith('69') ? `Nice! ;)` : `Copied! :)`;
+                            this.value = $('#pi').textContent * 1 == 69 ? `Nice! ;)` : `Copied! :)`;
                             this.pointerEvents = 'none';
                             setTimeout(() => {this.value = 'Copy PI';this.style.pointerEvents = '';}, 3000)
                         })
@@ -304,7 +305,7 @@
                         this.style.filter = 'hue-rotate(270deg) saturate(3.2)';
                         this.style.pointerEvents = 'none';
                         setTimeout(() => {this.value = 'Copy PI';this.style.filter = '';this.style.pointerEvents = '';}, 3000)  
-                    }">
+                    },0}">
             </div>
         </div>
     </div>

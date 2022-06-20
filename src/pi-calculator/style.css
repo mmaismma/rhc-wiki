@@ -28,7 +28,7 @@ body {
     box-sizing: border-box;
     overflow: hidden;
     font: inherit;
-    -webkit-tap-highlight-color: #3c872755;
+    -webkit-tap-highlight-color: transparent;
 }
 
 label, line {
