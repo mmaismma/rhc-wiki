@@ -38,7 +38,7 @@ label, line {
     overflow: visible;
     margin-bottom: 8px;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 2px;
 }
 
 helptext {
@@ -432,12 +432,12 @@ input[type=button], input[type=radio], input[type=checkbox] {
 
 @media (pointer: coarse) {
     input[type="number"] {
-        height: 48px;
-        width: 48px;
+        height: 40px;
+        width: 40px;
     }
     input[type=button].spinner {
-        height: 48px;
-        width: 48px;
+        height: 40px;
+        width: 40px;
     }
 }
 
