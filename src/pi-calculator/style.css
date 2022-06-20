@@ -37,6 +37,8 @@ label, line {
     align-items: center;
     overflow: visible;
     margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 helptext {
