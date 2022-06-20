@@ -295,7 +295,7 @@
                     event.preventDefault();
                     try {
                         navigator.clipboard.writeText($('#pi').textContent).then(() => {
-                            this.value = $('#pi').textContent == 69 ? `Nice! ;)` : `Copied! :)`;
+                            this.value = $('#pi').textContent.startsWith('69') ? `Nice! ;)` : `Copied! :)`;
                             this.pointerEvents = 'none';
                             setTimeout(() => {this.value = 'Copy PI';this.style.pointerEvents = '';}, 3000)
                         })
@@ -316,7 +316,7 @@
                 <input type="button" class="mini" value="×" onclick="$('main').style.display = 'none'" style="float:right; margin-right: 16px;">
             </h1>
             <div id="info">
-                An elegant UI to <a href="//reddit.com/r/fiuhc">r/FIUHC</a>'s PI calculator <a href="//docs.google.com/spreadsheets/d/1E9tmitLRYPkEMyW-5MxUGpptphufeblYzk0XuKw23nI/">spreadsheet</a>.
+                An elegant UI to <a href="//reddit.com/r/fiuhc">r/FIUHC</a>'s PI calculator <a href="https://www.dropbox.com/s/30caue7v1847aux/PI%20Calculator%20UHC%2030%20v2.xlsx">spreadsheet (S30v2)</a>.
                 <br><br>
                 FIUs (Fédération Internationale de l'Ultra Hardcore) are Formula 1-inspired fan-made championships that run alongside <a href="//mindcracklp.com">Mindcrack</a> and <a href="//hermitcraft.com">Hermitcraft</a> UHCs.
                 These chamipinships compete the players against each other based on the gear they are holding. Each player's inventory is noted at certain intervals and a formula generates a single number which shows the player's readiness to combat. This webpage can be used to generate that number.
@@ -324,7 +324,7 @@
                 <a href="https://redd.it/3brbtb/">More about FIUs</a>
 
                 <br><br>
-                From the <a href="//rhc-wiki.web.app">Operation Improve The Wiki (OITW)</a> team. v1.1.
+                v1.1. From the <a href="//rhc-wiki.web.app">Operation Improve The Wiki (OITW)</a> team.
             </div>
         </div>
     </main>
