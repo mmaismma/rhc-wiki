@@ -1,38 +1,39 @@
+const $ = (x, all) => {
+    if (all) return document.querySelectorAll(x, true);
+    return document.querySelector(x)
+}
+
 const UI = {
     showFile(e) {
         UI.notes.selectedNote = null;
         UI.loading(e.target, true);
-        firebase.storage().ref().child(e.target.dataset.fullpath).getDownloadURL().then(url => {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url)
-            xhr.addEventListener('readystatechange', () => {
-                if (xhr.readyState === 4) {
-                    try {
-                        let json = JSON.parse(xhr.response);
-                        UI.notes.selectedNote = {
-                            elm: e.target,
-                            message: json
-                        };
-                        UI.loading(e.target, false)
-                    } catch (error) {
-                        UI.showMessage(error)
-                        UI.notes.selectedNote = {
-                            elm: e.target,
-                            message: null
-                        };
-                        UI.loading(e.target, false)
-                    }
-                }
-            })
-            xhr.send();
 
-        }).catch(error => {
-            UI.showMessage(error)
+        let sessionData = sessionStorage.getItem(e.target.dataset.fullpath)
+        if (sessionData) {
+            UI.notes.selectedNote = {
+                elm: e.target,
+                message: sessionData
+            };
             UI.loading(e.target, false)
-        })
+        } else {
+            FIREBASE.getFile(e.target.dataset.fullpath).then(value => {
+                UI.notes.selectedNote = {
+                    elm: e.target,
+                    message: value
+                };
+                UI.loading(e.target, false)
+            }).catch(error => {
+                UI.showMessage(error)
+                UI.notes.selectedNote = {
+                    elm: e.target,
+                    message: null
+                };
+                UI.loading(e.target, false)
+            })
+        }
     },
     showMessage(msg) {
-        document.getElementsByTagName('logger')[0].textContent += '>:' + msg + '\n';
+        $('logger').textContent += '>' + msg + '\n';
     },
     loading(elm, loading = 'toggle', blockPointerEvents = true, colorArray = []) {
         switch (loading) {
@@ -63,71 +64,140 @@ const UI = {
             }
         }
     },
+    hideParameters: ["mmaismma"],
+    toggleNoteVisibility: {
+        update(parameter, visible) {
+            if (visible) {
+                UI.hideParameters.splice(UI.hideParameters.indexOf(parameter), 1);
+            } else {
+                UI.hideParameters.push(parameter);
+            }
+            [...$('#notes-holder').children].forEach(elm => {
+                for (let i = 0; i < UI.hideParameters.length; i++) {
+                    if ([...$(UI.hideParameters[i], true)].includes(elm)) {
+                        elm.style.display = 'none';
+                        break;
+                    }
+                    elm.style.display = '';
+                }
+            })
+        }
+    },
+    updateNoteFormattings() {
+        let currentYellows = localStorage.getItem('describer-yellowed') || '';
+        currentYellows = currentYellows.split(',');
+
+        let currentPinks = localStorage.getItem('describer-pinked') || '';
+        currentPinks = currentPinks.split(',');
+        UI.currentYellows = currentYellows.join();
+        UI.currentPinks = currentPinks.join();
+
+        [...$('#notes-holder').children].forEach(x => {
+            if (currentYellows.includes(x.textContent)) {
+                x.classList.add('yellowed')
+            } else {
+                x.classList.remove('yellowed')
+            }
+            if (currentPinks.includes(x.textContent)) {
+                x.classList.add('pinked')
+            } else {
+                x.classList.remove('pinked')
+            }
+        })
+    },
+    currentYellows: localStorage.getItem('describer-yellowed') || '',
+    currentPinks: localStorage.getItem('describer-pinked') || '',
     notes: new Proxy({
         selectedNote: null,
         allNotes: [],
         refresh() {
-            previewer.value = '';
-            UI.loading(document.getElementsByTagName('nav')[0], true)
-            firebase.storage().ref().child(`describers/user-data/${FIREBASE.user.uid}/`).listAll().then(result => {
-                console.log(result)
+            $('#file-preview').value = '';
+            UI.loading($('#notes-holder'), true)
+            firebase.storage().ref().child(`/notes/`).listAll().then(result => {
                 UI.notes.allNotes = result.items;
-                UI.loading(document.getElementsByTagName('nav')[0], false)
+                UI.loading($('#notes-holder'), false)
             }).catch(error => {
                 UI.showMessage(error)
-                UI.loading(document.getElementsByTagName('nav')[0], false)
+                UI.loading($('#notes-holder'), false)
             })
         }
     }, {
         set: (target, property, value, reciever) => {
             if (property === 'selectedNote') {
-                document.querySelector('related-links').innerHTML = 'Related Links:'
                 if (target[property]) {
                     target[property].elm.classList.remove('selected')
                 }
-                if (value) {
-                    console.log(value);
-                    value.elm.classList.add('selected')
-                    previewer.value = value.message?.message || value.message || 'Defected File.';
 
-                    if (value.message?.hermit && value.message?.hermit !== '--None--') {
-                        let hermitButton = document.createElement('a');
-                        hermitButton.textContent = value.message.hermit;
-                        hermitButton.href = `https://reddit.com/r/Hermitcraft/wiki/${value.message.hermit}`;
-                        hermitButton.target = '_blank';
-                        hermitButton.title = `Open ${value.message.hermit}'s wiki page in new tab`;
-                        document.querySelector('related-links').append(hermitButton)
-                    }
-                    if (value.message?.season && value.message?.season !== '--None--') {
-                        let seasonButton = document.createElement('a');
-                        seasonButton.textContent = `Season ${value.message.season}`;
-                        seasonButton.href = `https://reddit.com/r/Hermitcraft/wiki/season_${value.message.season}`;
-                        seasonButton.target = '_blank';
-                        seasonButton.title = `Open season ${value.message.season} wiki page in new tab`;
-                        document.querySelector('related-links').append(seasonButton)
-                    }
-        
-                    document.getElementById('invalid').disabled = false;
-                    document.getElementById('skip').disabled = false;
-                    document.getElementById('done').disabled = false;
+                if (value) {
+                    value.elm.classList.add('selected')
+                    $('#file-preview').value = value.message ?? '<<Hmm, looks like something blew up or this is a defected file>>';
+                    sessionStorage.setItem(value.elm.dataset.fullpath, value.message)
                 } else {
-                    previewer.value = '';
-                    document.getElementById('invalid').disabled = true;
-                    document.getElementById('skip').disabled = true;
-                    document.getElementById('done').disabled = true;
+                    $('#file-preview').value = '';
                 }
                 target[property] = value;
             }
             if (property === 'allNotes') {
                 target.selectedNote = null;
                 if (Array.isArray(value)) {
-                    document.getElementsByTagName('nav')[0].innerHTML = '';
-                    value.forEach(file => {
+                    $('#notes-holder').innerHTML = '';
+                    value.forEach(async file => {
+                        
+                        let metadata = await firebase.storage().ref().child(file.fullPath).getMetadata();
+                        
+                        let hermit = metadata.customMetadata.hermit;
+                        let season = "S"+metadata.customMetadata.season;
+                        let informer = "I"+metadata.customMetadata.informer;
+
                         let tempButton = document.createElement('button');
                         tempButton.textContent = file.name;
+                        tempButton.dataset.hermit = hermit;
+                        tempButton.dataset.season = season;
+                        tempButton.dataset.informer = informer;
                         tempButton.dataset.fullpath = file.fullPath;
-                        tempButton.onclick = UI.showFile;
-                        document.getElementsByTagName('nav')[0].append(tempButton);
+                        tempButton.onclick = (e) => {
+                            if (e.target.classList.contains('selected')) {
+                                let currentYellows = UI.currentYellows;
+                                currentYellows = currentYellows.split(',')
+                                if (currentYellows.includes(e.target.textContent)) {
+                                    currentYellows.splice(currentYellows.indexOf(e.target.textContent), 1);
+                                } else {
+                                    currentYellows.push(e.target.textContent)
+                                }
+                                localStorage.setItem('describer-yellowed', currentYellows.join())
+                                UI.updateNoteFormattings()
+                            } else {
+                                UI.showFile(e);
+                            }
+                        };
+                        tempButton.ondblclick = (e) => {
+                            let currentPinks = UI.currentPinks;
+                            currentPinks = currentPinks.split(',')
+                            if (currentPinks.includes(e.target.textContent)) {
+                                currentPinks.splice(currentPinks.indexOf(e.target.textContent), 1);
+                            } else {
+                                currentPinks.push(e.target.textContent)
+                            }
+                            localStorage.setItem('describer-pinked', currentPinks.join())
+                            UI.updateNoteFormattings()
+                        }
+
+                        if (!$(`[data-toggle-hermit=${hermit}]`)) {
+                            let tempInput = document.createElement('label')
+                            tempInput.innerHTML = `<input type="checkbox" checked data-toggle-hermit="${hermit}" oninput="javascript: UI.toggleNoteVisibility.update('[data-hermit='+this.dataset.toggleHermit+']', this.checked)">${hermit}`
+                            $('#hermit-hider').append(tempInput)
+                        }
+                        if (!$(`[data-toggle-season=${season}]`)) {
+                            let tempInput = document.createElement('label')
+                            tempInput.innerHTML = `<input type="checkbox" checked data-toggle-season="${season}" oninput="javascript: UI.toggleNoteVisibility.update('[data-season='+this.dataset.toggleSeason+']', this.checked)">${season}`
+                            $('#season-hider').append(tempInput)
+                        }
+                        if (!$(`[data-toggle-informer=${informer}]`)) {
+                            let tempInput = document.createElement('label')
+                            tempInput.innerHTML = `<input type="checkbox" checked data-toggle-informer="${informer}" oninput="javascript: UI.toggleNoteVisibility.update('[data-informer='+this.dataset.toggleInformer+']', this.checked)">${informer}`
+                            $('#informer-hider').append(tempInput)
+                        }
+                        $('#notes-holder').append(tempButton);
                     });
                 }
             }
@@ -140,109 +210,62 @@ const FIREBASE = {
         google: new firebase.auth.GoogleAuthProvider()
     },
     async authenticate(provider) {
-        UI.loading(document.getElementById('sign-in-google'), true)
+        UI.loading($('#sign-in-google'), true)
         try {
             let result = await firebase.auth().signInWithPopup(provider);
             let credential = result.credential;
             let token = credential.accessToken;
             let user = result.user;
-            document.getElementById('sign-in-google').textContent = `Sign out of ${user.displayName}`;
+            $('#sign-in-google').textContent = `Sign out of ${user.displayName}`;
 
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
             UI.showMessage(`Successfully signed in as ${user.displayName} (${user.email})`)
         } catch (error) {
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
             UI.showMessage(error)
         }
 
     },
     signOut() {
-        UI.loading(document.getElementById('sign-in-google'), true)
+        UI.loading($('#sign-in-google'), true)
         firebase.auth().signOut().then(() => {
-            document.getElementById('sign-in-google').textContent = 'Sign in with Google';
+            $('#sign-in-google').textContent = 'Sign in with Google';
             UI.notes.refresh();
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
             UI.showMessage('Successfully signed out')
         }).catch((error) => {
-            UI.loading(document.getElementById('sign-in-google'), false)
+            UI.loading($('#sign-in-google'), false)
             UI.showMessage(error.message)
         });
     },
-    uploadText(message, contentType = 'application/json', fileName) {
-        const storageRef = firebase.storage().ref();
-        const metadata = {
-            contentType: contentType
-        };
-        let gistRef = storageRef.child(fileName || 'user-gists/' + Date.now() + '.json');
-        return gistRef.putString(message, undefined, metadata)
-    },
-    async moveFirebaseFile(currentPath, destinationPath, fileContent) {
-        let message = '';
-        if (!fileContent) {
-            let url = await firebase.storage().ref().child(currentPath).getDownloadURL()
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url, false)
-            try {
-                xhr.send();
-                if (xhr.status !== 200) {
-                    UI.showMessage(`Error ${xhr.status}: ${xhr.statusText}`)
-                } else {
-                    message = xhr.response;
-                }
-            } catch (error) {
-                UI.showMessage(error)
-            }
-        } else {
-            message = fileContent;
-        }
-        try {
-            const putStringStatus = await firebase.storage().ref().child(destinationPath).putString(message, undefined, {contentType: 'application/json'});
-            console.log(putStringStatus);
-            const deleteStatus = await firebase.storage().ref().child(currentPath).delete()
-            console.log(deleteStatus)
-        } catch (error) {
-            UI.showMessage(error)
-        }
-    },
-    user: null
+    user: null,
+    async getFile(path) {
+        const url = await firebase.storage().ref().child(path).getDownloadURL()
+        const value = await fetch(url)
 
+        if (value.ok) {
+            return value.text();
+        } else {
+            throw new Error(`There is an error with this file, status: ${value.status}`)
+        }
+    }
 }
 
-let previewer = document.getElementById('file-preview');
 
-UI.loading(document.getElementById('sign-in-google'), true)
+UI.loading($('#sign-in-google'), true)
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         FIREBASE.user = user;
-        document.getElementById('sign-in-google').textContent = `Sign out of ${user.displayName}`
-        document.getElementById('sign-in-google').onclick = () => {
+        $('#sign-in-google').textContent = `Sign out of ${user.displayName}`
+        $('#sign-in-google').onclick = () => {
             FIREBASE.signOut()
         }
-        UI.notes.refresh()
-        UI.loading(document.getElementById('sign-in-google'), false)
+        UI.loading($('#sign-in-google'), false)
     } else {
-        document.getElementById('sign-in-google').onclick = () => {
+        $('#sign-in-google').onclick = () => {
             FIREBASE.authenticate(FIREBASE.authProviders.google)
         }
-        UI.loading(document.getElementById('sign-in-google'), false)
+        UI.loading($('#sign-in-google'), false)
     }
+    UI.notes.refresh()
 });
-
-document.getElementById('done').onclick = async (e) => {
-    setTimeout(() => UI.loading(document.getElementById('done'), true, undefined, ['#00c728', '#238636']), 0)
-    await FIREBASE.moveFirebaseFile(UI.notes.selectedNote.elm.dataset.fullpath, `describers/bucket/finished/${FIREBASE.user.uid}/${UI.notes.selectedNote.elm.textContent}`)
-    UI.notes.refresh()
-    setTimeout(() => UI.loading(document.getElementById('done'), false), 0)
-}
-document.getElementById('skip').onclick = async (e) => {
-    setTimeout(() => UI.loading(document.getElementById('skip'), true), 0)
-    await FIREBASE.moveFirebaseFile(UI.notes.selectedNote.elm.dataset.fullpath, `describers/bucket/skipped/${FIREBASE.user.uid}/${UI.notes.selectedNote.elm.textContent}`)
-    UI.notes.refresh()
-    setTimeout(() => UI.loading(document.getElementById('skip'), false), 0)
-}
-document.getElementById('invalid').onclick = async (e) => {
-    setTimeout(() => UI.loading(document.getElementById('invalid'), true, undefined, ['#f8513d', '#b52f20']), 0)
-    await FIREBASE.moveFirebaseFile(UI.notes.selectedNote.elm.dataset.fullpath, `describers/bucket/invalid/${FIREBASE.user.uid}/${UI.notes.selectedNote.elm.textContent}`)
-    UI.notes.refresh()
-    setTimeout(() => UI.loading(document.getElementById('invalid'), false), 0)
-}

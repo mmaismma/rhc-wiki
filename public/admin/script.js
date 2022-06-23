@@ -5,8 +5,11 @@ const previewer = $('#previewer')
 let path = 'user-gists/';
 
 const updateDimNotes = () => {
-    localStorage.getItem('dimNotes')?.split(',').forEach(dimNote => {
-        [...document.querySelectorAll(`[data-name="${dimNote}"`)].forEach(elm => elm.classList.add('dimmed'))
+    localStorage.getItem('dimNotes')?.split(',').forEach(dimNoteRaw => {
+        let dimNote = dimNoteRaw.trim()
+        if (dimNote) {
+                [...document.querySelectorAll(`[data-name="${dimNote}"]`)].forEach(elm => elm.classList.add('dimmed'))
+        }
     })
     console.log('akak');
 }
@@ -337,13 +340,13 @@ $('#copy').onclick = async () => {
 
 $('#dim').onclick = () => {
     let dimNotes = localStorage.getItem('dimNotes')
-    if (dimNotes.split(',').includes(UI.notes.selectedNote.elm.dataset.name)) {
+    if (dimNotes?.split(',').includes(UI.notes.selectedNote.elm.dataset.name)) {
         dimNotes = dimNotes.split(',')
         dimNotes.splice(dimNotes.indexOf(UI.notes.selectedNote.elm.dataset.name), 1);
         localStorage.setItem('dimNotes', dimNotes.join())
         UI.notes.selectedNote.elm.classList.remove('dimmed')
     } else {
-        localStorage.setItem('dimNotes', dimNotes + `,${UI.notes.selectedNote.elm.dataset.name}`)
+        localStorage.setItem('dimNotes', dimNotes ?? '' + `,${UI.notes.selectedNote.elm.dataset.name}`)
     }
     updateDimNotes()
 }

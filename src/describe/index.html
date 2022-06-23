@@ -33,27 +33,36 @@
 
 <body>
     <header>
-        <h1>RHC Wiki Describer v1.2.3</h1>
+        <h1>RHC Wiki Describer v2.0</h1>
         <button id="sign-in-google">Sign in</button>
     </header>
-    <nav aria-placeholder="Once you signin with Google, all your pending notes will be shown here">
-    </nav>
-    <main>
-        <textarea id="file-preview" placeholder="Select a file to view it's contents here"></textarea>
-        <controls>
-            <button disabled id="invalid" title="Mark as invalid">Invalid</button>
-            <button disabled id="skip" title="Skip this note">Skip</button>
-            <button disabled id="done" title="Mark as done">Done</button>
-        </controls>
-        <related-links>Related Links:</related-links>
-    </main>
 
-    <logger aria-placeholder="Messages including errors are shown here"></logger>
+    <content>
+        <nav aria-placeholder="Once you signin with Google, all available notes will be shown here">
+            <div id="notes-holder"></div>
+            <div id="options">
+                <details id="hermit-hider">
+                    <summary>Hide notes by Hermit</summary>
+                </details>
+                <details id="season-hider">
+                    <summary>Hide notes by Season</summary>
+                </details>
+                <details id="informer-hider">
+                    <summary>Hide notes by Informer</summary>
+                </details>
+            </div>
+        </nav>
+        <main>
+            <textarea id="file-preview" placeholder="Select a file to view it's contents here"></textarea>
+            <logger title="Messages including errors are shown here"></logger>
+        </main>
+    </content>
 
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
 
     <script>
         let firebaseConfig = {
