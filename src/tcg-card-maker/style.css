@@ -1,0 +1,145 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 100%;
+    background: #222;
+}
+
+canvas {
+    width: 70%;
+    background-color: lightcoral;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@font-face {
+  font-family: 'BadaBoom';
+  font-style: normal;
+  font-weight: 400;
+  src: url(./badabb__.ttf);
+}
+
+#preview {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70vw;
+    background: #fff;
+    opacity: 1;
+    font-family: BadaBoom;
+    font-size: 7vw;
+    letter-spacing: 3.5px;
+}
+
+#preview [contenteditable] {
+    min-width: 1ch;
+    cursor: text;
+    outline: 2px dashed currentColor;
+    outline-offset: 3px;
+}
+
+#preview [contenteditable]:empty:before {
+    content: attr(aria-placeholder);
+}
+
+#preview [contenteditable]:empty {
+    opacity: 0.5;
+}
+
+#preview .background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f3d992;
+    width: 95%;
+    height: 95%;
+    border-radius: 3%;
+}
+
+#preview .image {
+    position: absolute;
+    top: 13%;
+    left: 11%;
+    background: #fff;
+    width: 78%;
+    height: 52%;
+}
+
+#preview .seperator {
+    position: absolute;
+    top: 80%;
+    left: 4.5%;
+    background: #fff;
+    width: 91%;
+    height: 2.2%;
+}
+
+#preview .move-circle {
+    position: absolute;
+    left: 90%;
+    top: 10%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    width: 20%;
+    height: 20%;
+    border-radius: 100vmax;
+}
+
+#preview .card-name {
+    color: #000;
+    position: absolute;
+    left: 11%;
+    top: 3%;
+}
+
+#preview .hp {
+    color: #f00;
+    position: absolute;
+    right: 21%;
+    top: 3%;
+    text-align: right;
+}
+
+#preview .attack1-name {
+    color: #000;
+    position: absolute;
+    left: 50%;
+    top: 68%;
+    transform: translateX(-50%);
+}
+
+#preview .attack1-ap {
+    color: #f00;
+    position: absolute;
+    right: 6%;
+    top: 68%;
+    text-align: right;
+}
+
+#preview .attack2-name {
+    color: #000;
+    position: absolute;
+    left: 50%;
+    top: 85%;
+    transform: translateX(-50%);
+}
+
+#preview .attack2-ap {
+    color: #f00;
+    position: absolute;
+    right: 6%;
+    top: 85%;
+    text-align: right;
+}
